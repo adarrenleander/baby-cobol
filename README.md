@@ -7,7 +7,7 @@ Written using ANTLR and Java
 2. Run "mvn install" to install Maven dependencies
 3. If you get an error regarding "invalid target release", refer to this page https://stackoverflow.com/questions/73132312/spring-boot-fatal-error-compiling-invalid-target-release-17
 4. Configure ANTLR for BabyCobol.g4 file
-![Configure ANTLR.png](Configure ANTLR.png)
+![Configure ANTLR.png](assets/Configure%20ANTLR.png)
 
 ## Development
 1. Add lexer grammar in BCTokens.g4 file
