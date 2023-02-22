@@ -17,25 +17,26 @@ public class BabyCobolParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, VAR=4, INT=5, WS=6;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, VAR=6, INT=7, WS=8;
 	public static final int
-		RULE_program = 0, RULE_statements = 1, RULE_accept = 2, RULE_add = 3;
+		RULE_program = 0, RULE_statements = 1, RULE_accept = 2, RULE_add = 3, 
+		RULE_subtract = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "statements", "accept", "add"
+			"program", "statements", "accept", "add", "subtract"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'ACCEPT '", "'ADD '", "'TO '"
+			null, "'ACCEPT '", "'ADD '", "'TO '", "'SUBTRACT '", "'FROM '"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, "VAR", "INT", "WS"
+			null, null, null, null, null, null, "VAR", "INT", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -123,20 +124,20 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(9); 
+			setState(11); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(8);
+				setState(10);
 				statements();
 				}
 				}
-				setState(11); 
+				setState(13); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==T__0 || _la==T__1 );
+			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 22L) != 0 );
 			}
 		}
 		catch (RecognitionException re) {
@@ -157,6 +158,9 @@ public class BabyCobolParser extends Parser {
 		}
 		public AddContext add() {
 			return getRuleContext(AddContext.class,0);
+		}
+		public SubtractContext subtract() {
+			return getRuleContext(SubtractContext.class,0);
 		}
 		public StatementsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -181,21 +185,28 @@ public class BabyCobolParser extends Parser {
 		StatementsContext _localctx = new StatementsContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_statements);
 		try {
-			setState(15);
+			setState(18);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__0:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(13);
+				setState(15);
 				accept();
 				}
 				break;
 			case T__1:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(14);
+				setState(16);
 				add();
+				}
+				break;
+			case T__3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(17);
+				subtract();
 				}
 				break;
 			default:
@@ -241,9 +252,9 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(17);
+			setState(20);
 			match(T__0);
-			setState(18);
+			setState(21);
 			match(VAR);
 			}
 		}
@@ -287,13 +298,63 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(20);
-			match(T__1);
-			setState(21);
-			match(INT);
-			setState(22);
-			match(T__2);
 			setState(23);
+			match(T__1);
+			setState(24);
+			match(INT);
+			setState(25);
+			match(T__2);
+			setState(26);
+			match(VAR);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class SubtractContext extends ParserRuleContext {
+		public TerminalNode INT() { return getToken(BabyCobolParser.INT, 0); }
+		public TerminalNode VAR() { return getToken(BabyCobolParser.VAR, 0); }
+		public SubtractContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_subtract; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof BabyCobolListener ) ((BabyCobolListener)listener).enterSubtract(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof BabyCobolListener ) ((BabyCobolListener)listener).exitSubtract(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof BabyCobolVisitor ) return ((BabyCobolVisitor<? extends T>)visitor).visitSubtract(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final SubtractContext subtract() throws RecognitionException {
+		SubtractContext _localctx = new SubtractContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_subtract);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(28);
+			match(T__3);
+			setState(29);
+			match(INT);
+			setState(30);
+			match(T__4);
+			setState(31);
 			match(VAR);
 			}
 		}
@@ -309,23 +370,28 @@ public class BabyCobolParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0006\u001a\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
-		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0004\u0000"+
-		"\n\b\u0000\u000b\u0000\f\u0000\u000b\u0001\u0001\u0001\u0001\u0003\u0001"+
-		"\u0010\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0000\u0000\u0004\u0000"+
-		"\u0002\u0004\u0006\u0000\u0000\u0017\u0000\t\u0001\u0000\u0000\u0000\u0002"+
-		"\u000f\u0001\u0000\u0000\u0000\u0004\u0011\u0001\u0000\u0000\u0000\u0006"+
-		"\u0014\u0001\u0000\u0000\u0000\b\n\u0003\u0002\u0001\u0000\t\b\u0001\u0000"+
-		"\u0000\u0000\n\u000b\u0001\u0000\u0000\u0000\u000b\t\u0001\u0000\u0000"+
-		"\u0000\u000b\f\u0001\u0000\u0000\u0000\f\u0001\u0001\u0000\u0000\u0000"+
-		"\r\u0010\u0003\u0004\u0002\u0000\u000e\u0010\u0003\u0006\u0003\u0000\u000f"+
-		"\r\u0001\u0000\u0000\u0000\u000f\u000e\u0001\u0000\u0000\u0000\u0010\u0003"+
-		"\u0001\u0000\u0000\u0000\u0011\u0012\u0005\u0001\u0000\u0000\u0012\u0013"+
-		"\u0005\u0004\u0000\u0000\u0013\u0005\u0001\u0000\u0000\u0000\u0014\u0015"+
-		"\u0005\u0002\u0000\u0000\u0015\u0016\u0005\u0005\u0000\u0000\u0016\u0017"+
-		"\u0005\u0003\u0000\u0000\u0017\u0018\u0005\u0004\u0000\u0000\u0018\u0007"+
-		"\u0001\u0000\u0000\u0000\u0002\u000b\u000f";
+		"\u0004\u0001\b\"\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
+		"\u0000\u0004\u0000\f\b\u0000\u000b\u0000\f\u0000\r\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0003\u0001\u0013\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0004"+
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0000\u0000"+
+		"\u0005\u0000\u0002\u0004\u0006\b\u0000\u0000\u001f\u0000\u000b\u0001\u0000"+
+		"\u0000\u0000\u0002\u0012\u0001\u0000\u0000\u0000\u0004\u0014\u0001\u0000"+
+		"\u0000\u0000\u0006\u0017\u0001\u0000\u0000\u0000\b\u001c\u0001\u0000\u0000"+
+		"\u0000\n\f\u0003\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000\u0000\f\r"+
+		"\u0001\u0000\u0000\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e\u0001"+
+		"\u0000\u0000\u0000\u000e\u0001\u0001\u0000\u0000\u0000\u000f\u0013\u0003"+
+		"\u0004\u0002\u0000\u0010\u0013\u0003\u0006\u0003\u0000\u0011\u0013\u0003"+
+		"\b\u0004\u0000\u0012\u000f\u0001\u0000\u0000\u0000\u0012\u0010\u0001\u0000"+
+		"\u0000\u0000\u0012\u0011\u0001\u0000\u0000\u0000\u0013\u0003\u0001\u0000"+
+		"\u0000\u0000\u0014\u0015\u0005\u0001\u0000\u0000\u0015\u0016\u0005\u0006"+
+		"\u0000\u0000\u0016\u0005\u0001\u0000\u0000\u0000\u0017\u0018\u0005\u0002"+
+		"\u0000\u0000\u0018\u0019\u0005\u0007\u0000\u0000\u0019\u001a\u0005\u0003"+
+		"\u0000\u0000\u001a\u001b\u0005\u0006\u0000\u0000\u001b\u0007\u0001\u0000"+
+		"\u0000\u0000\u001c\u001d\u0005\u0004\u0000\u0000\u001d\u001e\u0005\u0007"+
+		"\u0000\u0000\u001e\u001f\u0005\u0005\u0000\u0000\u001f \u0005\u0006\u0000"+
+		"\u0000 \t\u0001\u0000\u0000\u0000\u0002\r\u0012";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

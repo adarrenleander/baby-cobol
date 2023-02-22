@@ -6,7 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="df6a0d87-6ec4-42c5-bead-dad03453faab" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/grammar/BabyCobol.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/grammar/BabyCobol.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobol.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobol.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobol.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobol.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolBaseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolBaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolBaseVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gen/babycobol/BabyCobolVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/babycobol/BabyCobolCustomListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/babycobol/BabyCobolCustomListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/main.bcbl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/main.bcbl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,11 +63,36 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ADL\Documents\GitHub\baby-cobol\assets" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.babycobol.Main" />
+      <module name="baby-cobol" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.babycobol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -67,7 +104,8 @@
       <workItem from="1676647093526" duration="4015000" />
       <workItem from="1676845545122" duration="1349000" />
       <workItem from="1676848619553" duration="118000" />
-      <workItem from="1676849360296" duration="52000" />
+      <workItem from="1676849360296" duration="147000" />
+      <workItem from="1677073116078" duration="2429000" />
     </task>
     <servers />
   </component>

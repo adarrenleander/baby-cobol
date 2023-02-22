@@ -1,1 +1,3 @@
 ACCEPT hello
+ADD 5 TO hello
+SUBTRACT 5 FROM hello

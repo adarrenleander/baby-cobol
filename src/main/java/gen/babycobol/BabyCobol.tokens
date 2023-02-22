@@ -1,9 +1,13 @@
 T__0=1
 T__1=2
 T__2=3
-VAR=4
-INT=5
-WS=6
+T__3=4
+T__4=5
+VAR=6
+INT=7
+WS=8
 'ACCEPT '=1
 'ADD '=2
 'TO '=3
+'SUBTRACT '=4
+'FROM '=5
