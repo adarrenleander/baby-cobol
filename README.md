@@ -10,7 +10,7 @@ Written using ANTLR and Java
 ![Configure ANTLR.png](assets/Configure%20ANTLR.png)
 
 ## Development
-Note: don't forget to create a new branch from the latest master branch each time you implement a new feature, and then create a pull request
+Note: don't forget to create a new branch from the latest master branch each time you implement a new feature
 1. Add lexer grammar in BCTokens.g4 file
 2. Add parser grammar in BabyCool.g4 file
 3. Generate ANTLR Recognizer for BabyCobol.g4 file
