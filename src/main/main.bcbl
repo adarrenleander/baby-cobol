@@ -1,4 +1,1 @@
-ACCEPT hello
-ADD 5 TO hello
-SUBTRACT 5 FROM hello
-ADD 2 TO hello
+ACCEPT a b c d

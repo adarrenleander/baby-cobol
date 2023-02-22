@@ -12,9 +12,11 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
 
     @Override public void exitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        String inp = sc.nextLine();
 
-        variableMap.put(ctx.VAR().getText(), Integer.parseInt(inp));
+        for (int i = 0; i < ctx.VAR().size(); i++) {
+            variableMap.put(ctx.VAR().get(i).getText(), Integer.parseInt(sc.next()));
+        }
+
         System.out.println(variableMap.toString());
     }
 
