@@ -1,4 +1,4 @@
 ACCEPT hello
 ADD 5 TO hello
 SUBTRACT 5 FROM hello
-ADD 1 TO hello
+ADD 2 TO hello
