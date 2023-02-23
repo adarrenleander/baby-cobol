@@ -36,23 +36,24 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
     }
 
     @Override public void exitSubtract(BabyCobolParser.SubtractContext ctx) {
+        String key;
+        int newValue;
+        int limit = ctx.INT().size();
+
         if (ctx.giving() == null) {
-            int newValue = variableMap.get(ctx.VAR().getText());
-            for (int i = 0; i < ctx.INT().size(); i++) {
-                newValue -= Integer.parseInt(ctx.INT().get(i).getText().trim());
-            }
-            variableMap.put(ctx.VAR().getText(), newValue);
+            key = ctx.VAR().getText();
+            newValue = variableMap.get(ctx.VAR().getText());
         } else {
-            int newValue = 0;
-            for (int i = 0; i < ctx.INT().size(); i++) {
-                if (i == ctx.INT().size() - 1) {
-                    newValue += Integer.parseInt(ctx.INT().get(i).getText().trim());
-                } else {
-                    newValue -= Integer.parseInt(ctx.INT().get(i).getText().trim());
-                }
-            }
-            variableMap.put(ctx.giving().VAR().getText(), newValue);
+            key = ctx.giving().VAR().getText();
+            newValue = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim());
+            limit -= 1;
         }
-        System.out.println(variableMap.toString());
+
+        for (int i = 0; i < limit; i++) {
+            newValue -= Integer.parseInt(ctx.INT().get(i).getText().trim());
+        }
+        variableMap.put(key, newValue);
+
+        System.out.println(variableMap);
     }
 }
