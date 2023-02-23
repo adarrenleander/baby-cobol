@@ -1,5 +1,5 @@
 # baby-cobol
-BabyCobol compiler for Software Evolution course
+BabyCobol interpreter for Software Evolution course
 Written using ANTLR and Java
 
 ## Setup

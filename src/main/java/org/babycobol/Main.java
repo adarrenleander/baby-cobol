@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class Main {
     public static void main(String[] args) {
-        // this is our compiler
+        // this is our interpreter
         try {
             CharStream input = CharStreams.fromFileName("src/main/main.bcbl");
             BabyCobolLexer lexer = new BabyCobolLexer(input);
