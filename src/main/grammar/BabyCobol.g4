@@ -17,6 +17,11 @@ accept
 
 add
     :   'ADD' INT+ 'TO' VAR
+    |   'ADD' INT+ 'TO' INT giving
+    ;
+
+giving
+    :   'GIVING' VAR
     ;
 
 subtract

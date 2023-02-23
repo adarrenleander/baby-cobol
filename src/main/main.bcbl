@@ -1,2 +1,3 @@
 ACCEPT a b c d
-ADD 1 1 1 TO a
+ADD 1 1 1 TO 5 GIVING e
+ADD 2 TO b
