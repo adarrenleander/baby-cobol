@@ -20,10 +20,11 @@ add
     |   'ADD' INT+ 'TO' INT giving
     ;
 
-giving
-    :   'GIVING' VAR
+subtract
+    :   'SUBTRACT' INT+ 'FROM' VAR
+    |   'SUBTRACT' INT+ 'FROM' INT giving
     ;
 
-subtract
-    :   'SUBTRACT' INT 'FROM' VAR
+giving
+    :   'GIVING' VAR
     ;

@@ -4,7 +4,6 @@ import gen.babycobol.BabyCobolBaseListener;
 import gen.babycobol.BabyCobolParser;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
 
 // add overrides of listener functions here
@@ -37,7 +36,23 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
     }
 
     @Override public void exitSubtract(BabyCobolParser.SubtractContext ctx) {
-        variableMap.put(ctx.VAR().getText(),  variableMap.get(ctx.VAR().getText()) - Integer.parseInt(ctx.INT().getText().trim()));
+        if (ctx.giving() == null) {
+            int newValue = variableMap.get(ctx.VAR().getText());
+            for (int i = 0; i < ctx.INT().size(); i++) {
+                newValue -= Integer.parseInt(ctx.INT().get(i).getText().trim());
+            }
+            variableMap.put(ctx.VAR().getText(), newValue);
+        } else {
+            int newValue = 0;
+            for (int i = 0; i < ctx.INT().size(); i++) {
+                if (i == ctx.INT().size() - 1) {
+                    newValue += Integer.parseInt(ctx.INT().get(i).getText().trim());
+                } else {
+                    newValue -= Integer.parseInt(ctx.INT().get(i).getText().trim());
+                }
+            }
+            variableMap.put(ctx.giving().VAR().getText(), newValue);
+        }
         System.out.println(variableMap.toString());
     }
 }
