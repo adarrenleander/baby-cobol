@@ -16,7 +16,7 @@ accept
     ;
 
 add
-    :   'ADD' INT 'TO' VAR
+    :   'ADD' INT+ 'TO' VAR
     ;
 
 subtract
