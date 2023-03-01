@@ -10,6 +10,7 @@ statements
     |   add
     |   subtract
     |   stop
+    |   display
     ;
 
 accept
@@ -28,6 +29,11 @@ subtract
 
 giving
     :   'GIVING' VAR
+    ;
+
+display
+    :   'DISPLAY' INT
+    |   'DISPLAY' VAR
     ;
 
 

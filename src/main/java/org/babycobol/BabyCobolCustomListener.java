@@ -61,6 +61,26 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
     }
 
     @Override
+    public void exitDisplay(BabyCobolParser.DisplayContext ctx) {
+        if (ctx.VAR() != null)
+            System.out.println(variableMap.get(ctx.VAR().getText()));
+
+        if (ctx.INT() != null)
+            System.out.println(ctx.INT().getText());
+
+        /*if (ctx.VAR() != null)
+        for (int i = 0; i < ctx.VAR().size(); i++) {
+            System.out.println(variableMap.get(ctx.VAR().getText()));
+        }*/
+        if (ctx.VAR() != null)
+            System.out.print(variableMap.get(ctx.VAR().getText()));
+
+        if (ctx.INT() != null)
+            System.out.print(ctx.INT().getText());
+
+    }
+
+    @Override
     public void exitStop(BabyCobolParser.StopContext ctx) {
         System.exit(0);
     }
