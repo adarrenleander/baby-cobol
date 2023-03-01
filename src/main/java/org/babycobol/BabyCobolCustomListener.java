@@ -62,21 +62,21 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
 
     @Override
     public void exitDisplay(BabyCobolParser.DisplayContext ctx) {
-        if (ctx.VAR() != null)
-            System.out.println(variableMap.get(ctx.VAR().getText()));
+        int size = ctx.withnoadvancing() == null ? ctx.getChildCount() : ctx.getChildCount() - 1;
+        for (int idx = 1; idx < size; idx++) {
+            String token = ctx.getChild(idx).getText();
 
-        if (ctx.INT() != null)
-            System.out.println(ctx.INT().getText());
+            if (Character.isAlphabetic(token.codePointAt(0))) {
+                System.out.print(variableMap.get(token));
+                System.out.print(" ");
+            } else {
+                System.out.print(token);
+                System.out.print(" ");
+            }
+        }
 
-        /*if (ctx.VAR() != null)
-        for (int i = 0; i < ctx.VAR().size(); i++) {
-            System.out.println(variableMap.get(ctx.VAR().getText()));
-        }*/
-        if (ctx.VAR() != null)
-            System.out.print(variableMap.get(ctx.VAR().getText()));
-
-        if (ctx.INT() != null)
-            System.out.print(ctx.INT().getText());
+        if (ctx.withnoadvancing() == null)
+            System.out.println();
 
     }
 

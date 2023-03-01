@@ -32,10 +32,12 @@ giving
     ;
 
 display
-    :   'DISPLAY' INT
-    |   'DISPLAY' VAR
+    :   'DISPLAY' (INT|VAR)+ withnoadvancing?
     ;
 
+withnoadvancing
+    : 'WITH NO ADVANCING'
+    ;
 
 stop
     : 'STOP'

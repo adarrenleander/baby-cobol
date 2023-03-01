@@ -101,6 +101,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStop(BabyCobolParser.StopContext ctx) { }
 	/**
 	 * {@inheritDoc}
