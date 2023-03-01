@@ -84,6 +84,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGiving(BabyCobolParser.GivingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStop(BabyCobolParser.StopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStop(BabyCobolParser.StopContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

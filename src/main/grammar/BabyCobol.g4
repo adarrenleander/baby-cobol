@@ -28,3 +28,8 @@ subtract
 giving
     :   'GIVING' VAR
     ;
+
+
+stop
+    : 'STOP' VAR
+    ;
