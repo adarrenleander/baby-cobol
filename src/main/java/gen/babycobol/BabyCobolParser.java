@@ -139,7 +139,7 @@ public class BabyCobolParser extends Parser {
 				setState(17); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 22L) != 0 );
+			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 150L) != 0 );
 			}
 		}
 		catch (RecognitionException re) {
@@ -164,6 +164,9 @@ public class BabyCobolParser extends Parser {
 		public SubtractContext subtract() {
 			return getRuleContext(SubtractContext.class,0);
 		}
+		public StopContext stop() {
+			return getRuleContext(StopContext.class,0);
+		}
 		public StatementsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -187,7 +190,7 @@ public class BabyCobolParser extends Parser {
 		StatementsContext _localctx = new StatementsContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_statements);
 		try {
-			setState(22);
+			setState(23);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__0:
@@ -209,6 +212,13 @@ public class BabyCobolParser extends Parser {
 				{
 				setState(21);
 				subtract();
+				}
+				break;
+			case T__6:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(22);
+				stop();
 				}
 				break;
 			default:
@@ -258,19 +268,19 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(24);
+			setState(25);
 			match(T__0);
-			setState(26); 
+			setState(27); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(25);
+				setState(26);
 				match(VAR);
 				}
 				}
-				setState(28); 
+				setState(29); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==VAR );
@@ -321,58 +331,58 @@ public class BabyCobolParser extends Parser {
 		enterRule(_localctx, 6, RULE_add);
 		int _la;
 		try {
-			setState(47);
+			setState(48);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(30);
+				setState(31);
 				match(T__1);
-				setState(32); 
+				setState(33); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(31);
+					setState(32);
 					match(INT);
 					}
 					}
-					setState(34); 
+					setState(35); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==INT );
-				setState(36);
-				match(T__2);
 				setState(37);
+				match(T__2);
+				setState(38);
 				match(VAR);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(38);
+				setState(39);
 				match(T__1);
-				setState(40); 
+				setState(41); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(39);
+					setState(40);
 					match(INT);
 					}
 					}
-					setState(42); 
+					setState(43); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==INT );
-				setState(44);
-				match(T__2);
 				setState(45);
-				match(INT);
+				match(T__2);
 				setState(46);
+				match(INT);
+				setState(47);
 				giving();
 				}
 				break;
@@ -423,58 +433,58 @@ public class BabyCobolParser extends Parser {
 		enterRule(_localctx, 8, RULE_subtract);
 		int _la;
 		try {
-			setState(66);
+			setState(67);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(49);
+				setState(50);
 				match(T__3);
-				setState(51); 
+				setState(52); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(50);
+					setState(51);
 					match(INT);
 					}
 					}
-					setState(53); 
+					setState(54); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==INT );
-				setState(55);
-				match(T__4);
 				setState(56);
+				match(T__4);
+				setState(57);
 				match(VAR);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(57);
+				setState(58);
 				match(T__3);
-				setState(59); 
+				setState(60); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(58);
+					setState(59);
 					match(INT);
 					}
 					}
-					setState(61); 
+					setState(62); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==INT );
-				setState(63);
-				match(T__4);
 				setState(64);
-				match(INT);
+				match(T__4);
 				setState(65);
+				match(INT);
+				setState(66);
 				giving();
 				}
 				break;
@@ -519,9 +529,9 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(68);
-			match(T__5);
 			setState(69);
+			match(T__5);
+			setState(70);
 			match(VAR);
 			}
 		}
@@ -538,7 +548,6 @@ public class BabyCobolParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class StopContext extends ParserRuleContext {
-		public TerminalNode VAR() { return getToken(BabyCobolParser.VAR, 0); }
 		public StopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -564,10 +573,8 @@ public class BabyCobolParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71);
-			match(T__6);
 			setState(72);
-			match(VAR);
+			match(T__6);
 			}
 		}
 		catch (RecognitionException re) {
@@ -586,47 +593,48 @@ public class BabyCobolParser extends Parser {
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0001\u0000\u0004\u0000\u0010"+
 		"\b\u0000\u000b\u0000\f\u0000\u0011\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0003\u0001\u0017\b\u0001\u0001\u0002\u0001\u0002\u0004\u0002\u001b\b"+
-		"\u0002\u000b\u0002\f\u0002\u001c\u0001\u0003\u0001\u0003\u0004\u0003!"+
-		"\b\u0003\u000b\u0003\f\u0003\"\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
-		"\u0003\u0004\u0003)\b\u0003\u000b\u0003\f\u0003*\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0003\u00030\b\u0003\u0001\u0004\u0001\u0004\u0004\u0004"+
-		"4\b\u0004\u000b\u0004\f\u00045\u0001\u0004\u0001\u0004\u0001\u0004\u0001"+
-		"\u0004\u0004\u0004<\b\u0004\u000b\u0004\f\u0004=\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0003\u0004C\b\u0004\u0001\u0005\u0001\u0005\u0001\u0005"+
-		"\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0000\u0000\u0007\u0000"+
-		"\u0002\u0004\u0006\b\n\f\u0000\u0000M\u0000\u000f\u0001\u0000\u0000\u0000"+
-		"\u0002\u0016\u0001\u0000\u0000\u0000\u0004\u0018\u0001\u0000\u0000\u0000"+
-		"\u0006/\u0001\u0000\u0000\u0000\bB\u0001\u0000\u0000\u0000\nD\u0001\u0000"+
-		"\u0000\u0000\fG\u0001\u0000\u0000\u0000\u000e\u0010\u0003\u0002\u0001"+
-		"\u0000\u000f\u000e\u0001\u0000\u0000\u0000\u0010\u0011\u0001\u0000\u0000"+
-		"\u0000\u0011\u000f\u0001\u0000\u0000\u0000\u0011\u0012\u0001\u0000\u0000"+
-		"\u0000\u0012\u0001\u0001\u0000\u0000\u0000\u0013\u0017\u0003\u0004\u0002"+
-		"\u0000\u0014\u0017\u0003\u0006\u0003\u0000\u0015\u0017\u0003\b\u0004\u0000"+
-		"\u0016\u0013\u0001\u0000\u0000\u0000\u0016\u0014\u0001\u0000\u0000\u0000"+
-		"\u0016\u0015\u0001\u0000\u0000\u0000\u0017\u0003\u0001\u0000\u0000\u0000"+
-		"\u0018\u001a\u0005\u0001\u0000\u0000\u0019\u001b\u0005\b\u0000\u0000\u001a"+
-		"\u0019\u0001\u0000\u0000\u0000\u001b\u001c\u0001\u0000\u0000\u0000\u001c"+
-		"\u001a\u0001\u0000\u0000\u0000\u001c\u001d\u0001\u0000\u0000\u0000\u001d"+
-		"\u0005\u0001\u0000\u0000\u0000\u001e \u0005\u0002\u0000\u0000\u001f!\u0005"+
-		"\t\u0000\u0000 \u001f\u0001\u0000\u0000\u0000!\"\u0001\u0000\u0000\u0000"+
-		"\" \u0001\u0000\u0000\u0000\"#\u0001\u0000\u0000\u0000#$\u0001\u0000\u0000"+
-		"\u0000$%\u0005\u0003\u0000\u0000%0\u0005\b\u0000\u0000&(\u0005\u0002\u0000"+
-		"\u0000\')\u0005\t\u0000\u0000(\'\u0001\u0000\u0000\u0000)*\u0001\u0000"+
-		"\u0000\u0000*(\u0001\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+,\u0001"+
-		"\u0000\u0000\u0000,-\u0005\u0003\u0000\u0000-.\u0005\t\u0000\u0000.0\u0003"+
-		"\n\u0005\u0000/\u001e\u0001\u0000\u0000\u0000/&\u0001\u0000\u0000\u0000"+
-		"0\u0007\u0001\u0000\u0000\u000013\u0005\u0004\u0000\u000024\u0005\t\u0000"+
-		"\u000032\u0001\u0000\u0000\u000045\u0001\u0000\u0000\u000053\u0001\u0000"+
-		"\u0000\u000056\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u000078\u0005"+
-		"\u0005\u0000\u00008C\u0005\b\u0000\u00009;\u0005\u0004\u0000\u0000:<\u0005"+
-		"\t\u0000\u0000;:\u0001\u0000\u0000\u0000<=\u0001\u0000\u0000\u0000=;\u0001"+
-		"\u0000\u0000\u0000=>\u0001\u0000\u0000\u0000>?\u0001\u0000\u0000\u0000"+
-		"?@\u0005\u0005\u0000\u0000@A\u0005\t\u0000\u0000AC\u0003\n\u0005\u0000"+
-		"B1\u0001\u0000\u0000\u0000B9\u0001\u0000\u0000\u0000C\t\u0001\u0000\u0000"+
-		"\u0000DE\u0005\u0006\u0000\u0000EF\u0005\b\u0000\u0000F\u000b\u0001\u0000"+
-		"\u0000\u0000GH\u0005\u0007\u0000\u0000HI\u0005\b\u0000\u0000I\r\u0001"+
-		"\u0000\u0000\u0000\t\u0011\u0016\u001c\"*/5=B";
+		"\u0001\u0001\u0003\u0001\u0018\b\u0001\u0001\u0002\u0001\u0002\u0004\u0002"+
+		"\u001c\b\u0002\u000b\u0002\f\u0002\u001d\u0001\u0003\u0001\u0003\u0004"+
+		"\u0003\"\b\u0003\u000b\u0003\f\u0003#\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0004\u0003*\b\u0003\u000b\u0003\f\u0003+\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0003\u00031\b\u0003\u0001\u0004\u0001\u0004\u0004"+
+		"\u00045\b\u0004\u000b\u0004\f\u00046\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0001\u0004\u0004\u0004=\b\u0004\u000b\u0004\f\u0004>\u0001\u0004\u0001"+
+		"\u0004\u0001\u0004\u0003\u0004D\b\u0004\u0001\u0005\u0001\u0005\u0001"+
+		"\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0000\u0000\u0007\u0000\u0002"+
+		"\u0004\u0006\b\n\f\u0000\u0000N\u0000\u000f\u0001\u0000\u0000\u0000\u0002"+
+		"\u0017\u0001\u0000\u0000\u0000\u0004\u0019\u0001\u0000\u0000\u0000\u0006"+
+		"0\u0001\u0000\u0000\u0000\bC\u0001\u0000\u0000\u0000\nE\u0001\u0000\u0000"+
+		"\u0000\fH\u0001\u0000\u0000\u0000\u000e\u0010\u0003\u0002\u0001\u0000"+
+		"\u000f\u000e\u0001\u0000\u0000\u0000\u0010\u0011\u0001\u0000\u0000\u0000"+
+		"\u0011\u000f\u0001\u0000\u0000\u0000\u0011\u0012\u0001\u0000\u0000\u0000"+
+		"\u0012\u0001\u0001\u0000\u0000\u0000\u0013\u0018\u0003\u0004\u0002\u0000"+
+		"\u0014\u0018\u0003\u0006\u0003\u0000\u0015\u0018\u0003\b\u0004\u0000\u0016"+
+		"\u0018\u0003\f\u0006\u0000\u0017\u0013\u0001\u0000\u0000\u0000\u0017\u0014"+
+		"\u0001\u0000\u0000\u0000\u0017\u0015\u0001\u0000\u0000\u0000\u0017\u0016"+
+		"\u0001\u0000\u0000\u0000\u0018\u0003\u0001\u0000\u0000\u0000\u0019\u001b"+
+		"\u0005\u0001\u0000\u0000\u001a\u001c\u0005\b\u0000\u0000\u001b\u001a\u0001"+
+		"\u0000\u0000\u0000\u001c\u001d\u0001\u0000\u0000\u0000\u001d\u001b\u0001"+
+		"\u0000\u0000\u0000\u001d\u001e\u0001\u0000\u0000\u0000\u001e\u0005\u0001"+
+		"\u0000\u0000\u0000\u001f!\u0005\u0002\u0000\u0000 \"\u0005\t\u0000\u0000"+
+		"! \u0001\u0000\u0000\u0000\"#\u0001\u0000\u0000\u0000#!\u0001\u0000\u0000"+
+		"\u0000#$\u0001\u0000\u0000\u0000$%\u0001\u0000\u0000\u0000%&\u0005\u0003"+
+		"\u0000\u0000&1\u0005\b\u0000\u0000\')\u0005\u0002\u0000\u0000(*\u0005"+
+		"\t\u0000\u0000)(\u0001\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+)\u0001"+
+		"\u0000\u0000\u0000+,\u0001\u0000\u0000\u0000,-\u0001\u0000\u0000\u0000"+
+		"-.\u0005\u0003\u0000\u0000./\u0005\t\u0000\u0000/1\u0003\n\u0005\u0000"+
+		"0\u001f\u0001\u0000\u0000\u00000\'\u0001\u0000\u0000\u00001\u0007\u0001"+
+		"\u0000\u0000\u000024\u0005\u0004\u0000\u000035\u0005\t\u0000\u000043\u0001"+
+		"\u0000\u0000\u000056\u0001\u0000\u0000\u000064\u0001\u0000\u0000\u0000"+
+		"67\u0001\u0000\u0000\u000078\u0001\u0000\u0000\u000089\u0005\u0005\u0000"+
+		"\u00009D\u0005\b\u0000\u0000:<\u0005\u0004\u0000\u0000;=\u0005\t\u0000"+
+		"\u0000<;\u0001\u0000\u0000\u0000=>\u0001\u0000\u0000\u0000><\u0001\u0000"+
+		"\u0000\u0000>?\u0001\u0000\u0000\u0000?@\u0001\u0000\u0000\u0000@A\u0005"+
+		"\u0005\u0000\u0000AB\u0005\t\u0000\u0000BD\u0003\n\u0005\u0000C2\u0001"+
+		"\u0000\u0000\u0000C:\u0001\u0000\u0000\u0000D\t\u0001\u0000\u0000\u0000"+
+		"EF\u0005\u0006\u0000\u0000FG\u0005\b\u0000\u0000G\u000b\u0001\u0000\u0000"+
+		"\u0000HI\u0005\u0007\u0000\u0000I\r\u0001\u0000\u0000\u0000\t\u0011\u0017"+
+		"\u001d#+06>C";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

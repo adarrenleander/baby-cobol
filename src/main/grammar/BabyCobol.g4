@@ -9,6 +9,7 @@ statements
     :   accept
     |   add
     |   subtract
+    |   stop
     ;
 
 accept
@@ -31,5 +32,5 @@ giving
 
 
 stop
-    : 'STOP' VAR
+    : 'STOP'
     ;

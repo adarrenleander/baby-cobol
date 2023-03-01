@@ -2,6 +2,7 @@ package org.babycobol;
 
 import gen.babycobol.BabyCobolBaseListener;
 import gen.babycobol.BabyCobolParser;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -57,5 +58,10 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
         variableMap.put(key, newValue);
 
         System.out.println(variableMap);
+    }
+
+    @Override
+    public void exitStop(BabyCobolParser.StopContext ctx) {
+        System.exit(0);
     }
 }
