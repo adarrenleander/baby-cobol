@@ -29,13 +29,37 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatements(BabyCobolParser.StatementsContext ctx) { }
+	@Override public void enterSentence(BabyCobolParser.SentenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatements(BabyCobolParser.StatementsContext ctx) { }
+	@Override public void exitSentence(BabyCobolParser.SentenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProcname(BabyCobolParser.ProcnameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProcname(BabyCobolParser.ProcnameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatement(BabyCobolParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatement(BabyCobolParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -120,6 +144,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStop(BabyCobolParser.StopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPerform(BabyCobolParser.PerformContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPerform(BabyCobolParser.PerformContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

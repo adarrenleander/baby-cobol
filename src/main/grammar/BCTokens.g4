@@ -11,3 +11,5 @@ INT
 WS
     :   [ \t\r\n\f]+ -> skip
     ;
+
+DOT: '.';

@@ -17,11 +17,23 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(BabyCobolParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BabyCobolParser#statements}.
+	 * Visit a parse tree produced by {@link BabyCobolParser#sentence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatements(BabyCobolParser.StatementsContext ctx);
+	T visitSentence(BabyCobolParser.SentenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#procname}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProcname(BabyCobolParser.ProcnameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(BabyCobolParser.StatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#accept}.
 	 * @param ctx the parse tree
@@ -64,4 +76,10 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStop(BabyCobolParser.StopContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#perform}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPerform(BabyCobolParser.PerformContext ctx);
 }

@@ -18,15 +18,35 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitProgram(BabyCobolParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BabyCobolParser#statements}.
+	 * Enter a parse tree produced by {@link BabyCobolParser#sentence}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatements(BabyCobolParser.StatementsContext ctx);
+	void enterSentence(BabyCobolParser.SentenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BabyCobolParser#statements}.
+	 * Exit a parse tree produced by {@link BabyCobolParser#sentence}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatements(BabyCobolParser.StatementsContext ctx);
+	void exitSentence(BabyCobolParser.SentenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#procname}.
+	 * @param ctx the parse tree
+	 */
+	void enterProcname(BabyCobolParser.ProcnameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#procname}.
+	 * @param ctx the parse tree
+	 */
+	void exitProcname(BabyCobolParser.ProcnameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(BabyCobolParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(BabyCobolParser.StatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#accept}.
 	 * @param ctx the parse tree
@@ -97,4 +117,14 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStop(BabyCobolParser.StopContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#perform}.
+	 * @param ctx the parse tree
+	 */
+	void enterPerform(BabyCobolParser.PerformContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#perform}.
+	 * @param ctx the parse tree
+	 */
+	void exitPerform(BabyCobolParser.PerformContext ctx);
 }

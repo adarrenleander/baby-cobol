@@ -2,15 +2,20 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   statements+
+    :   sentence+
     ;
 
-statements
+sentence : ((procname DOT)? statement+ DOT) ;
+
+procname: VAR;
+
+statement
     :   accept
     |   add
     |   subtract
-    |   stop
+    |   perform
     |   display
+    |   stop
     ;
 
 accept
@@ -41,4 +46,8 @@ withnoadvancing
 
 stop
     : 'STOP'
+    ;
+
+perform
+    : 'PERFORM' procname
     ;
