@@ -106,4 +106,27 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
 
         return visit(procNames.get(name));
     }
+
+    @Override
+    public Void visitMove(BabyCobolParser.MoveContext ctx) {
+
+
+        String token = ctx.getChild(1).getText();
+        int value;
+        if (Character.isAlphabetic(token.codePointAt(0))) {
+
+            value = variableMap.get(token);
+        }
+         else {
+            value = Integer.parseInt(token);
+        }
+
+         for (int idx = 3; idx < ctx.getChildCount(); idx++) {
+             token = ctx.getChild(idx).getText();
+             variableMap.put(token, value);
+         }
+        //System.out.println(variableMap);
+        return defaultResult();
+    }
 }
+

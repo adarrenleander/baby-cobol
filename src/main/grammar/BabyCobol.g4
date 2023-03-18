@@ -16,6 +16,7 @@ statement
     |   perform
     |   display
     |   stop
+    |   move
     ;
 
 accept
@@ -50,4 +51,7 @@ stop
 
 perform
     : 'PERFORM' procname
+    ;
+move
+    :   'MOVE' (INT|VAR) 'TO' VAR+
     ;

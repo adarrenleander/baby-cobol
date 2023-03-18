@@ -127,4 +127,14 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPerform(BabyCobolParser.PerformContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#move}.
+	 * @param ctx the parse tree
+	 */
+	void enterMove(BabyCobolParser.MoveContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#move}.
+	 * @param ctx the parse tree
+	 */
+	void exitMove(BabyCobolParser.MoveContext ctx);
 }
