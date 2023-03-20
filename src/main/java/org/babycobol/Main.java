@@ -1,7 +1,7 @@
 package org.babycobol;
 
-import gen.babycobol.BabyCobolLexer;
-import gen.babycobol.BabyCobolParser;
+import org.babycobol.parser.BabyCobolLexer;
+import org.babycobol.parser.BabyCobolParser;
 import org.antlr.v4.runtime.*;
 
 import java.io.IOException;

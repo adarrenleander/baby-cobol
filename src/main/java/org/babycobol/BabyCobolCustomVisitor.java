@@ -1,10 +1,12 @@
 package org.babycobol;
 
-import gen.babycobol.BabyCobolBaseVisitor;
-import gen.babycobol.BabyCobolParser;
+import org.antlr.v4.runtime.RecognitionException;
+import org.babycobol.parser.BabyCobolBaseVisitor;
+import org.babycobol.parser.BabyCobolParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -12,6 +14,7 @@ import java.util.Scanner;
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
     private final Map<String, Integer> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
+    private final VariableParser varParser = new VariableParser();
 
     public BabyCobolCustomVisitor(Map<String, ParseTree> procNames) {
         this.procNames = procNames;
@@ -33,10 +36,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
         int newValue = 0;
 
         if (ctx.giving() == null) {
-            newValue = variableMap.get(ctx.VAR().getText());
-            key = ctx.VAR().getText();
+            key = ctx.singlevar().getText();
+            newValue = variableMap.get(key);
         } else {
-            key = ctx.giving().VAR().getText();
+            key = ctx.giving().singlevar().getText();
         }
 
         for (int i = 0; i < ctx.INT().size(); i++) {
@@ -58,7 +61,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
             key = ctx.VAR().getText();
             newValue = variableMap.get(ctx.VAR().getText());
         } else {
-            key = ctx.giving().VAR().getText();
+            key = ctx.giving().singlevar().getText();
             newValue = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim());
             limit -= 1;
         }
@@ -110,23 +113,24 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
     @Override
     public Void visitMove(BabyCobolParser.MoveContext ctx) {
 
-
-        String token = ctx.getChild(1).getText();
         int value;
-        if (Character.isAlphabetic(token.codePointAt(0))) {
-
-            value = variableMap.get(token);
+        if (ctx.INT() == null) {
+            String variableName = varParser.parseSingleVar(ctx.singlevar());
+            value = variableMap.get(variableName);
+        } else {
+            value = Integer.parseInt(ctx.INT().getText());
         }
-         else {
-            value = Integer.parseInt(token);
+
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().VAR(), variableMap.keySet());
+
+        if (varNames.isEmpty())
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().VAR());
+
+        for (String name : varNames) {
+            variableMap.put(name, value);
         }
 
-         for (int idx = 3; idx < ctx.getChildCount(); idx++) {
-             token = ctx.getChild(idx).getText();
-             variableMap.put(token, value);
-         }
         //System.out.println(variableMap);
         return defaultResult();
     }
 }
-

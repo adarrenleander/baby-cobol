@@ -18,8 +18,37 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.11.1</version>
+            <version>4.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>4.12.0</version>
+                <configuration>
+                    <listener>true</listener>
+                    <visitor>true</visitor>
+                    <sourceDirectory>${basedir}/src/main/grammar</sourceDirectory>
+                    <libDirectory>${basedir}/src/main/grammar/org/babycobol/parser</libDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>antlr-generate</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

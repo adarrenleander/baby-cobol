@@ -20,11 +20,11 @@ statement
     ;
 
 accept
-    :   'ACCEPT' VAR+
+    :   ACCEPT VAR+
     ;
 
 add
-    :   'ADD' INT+ 'TO' VAR
+    :   'ADD' INT+ 'TO' singlevar
     |   'ADD' INT+ 'TO' INT giving
     ;
 
@@ -34,7 +34,7 @@ subtract
     ;
 
 giving
-    :   'GIVING' VAR
+    :   'GIVING' singlevar
     ;
 
 display
@@ -53,5 +53,8 @@ perform
     : 'PERFORM' procname
     ;
 move
-    :   'MOVE' (INT|VAR) 'TO' VAR+
+    :   MOVE (INT|singlevar) 'TO' multivar
     ;
+
+multivar : VAR+ ;
+singlevar : VAR+ ;
