@@ -16,6 +16,8 @@ statement
     |   perform
     |   display
     |   stop
+    |   divide
+    |   multiply
     ;
 
 accept
@@ -30,6 +32,17 @@ add
 subtract
     :   'SUBTRACT' INT+ 'FROM' VAR
     |   'SUBTRACT' INT+ 'FROM' INT giving
+    ;
+
+divide
+    :   'DIVIDE' INT 'INTO' VAR+
+    |   'DIVIDE' INT 'INTO' INT giving
+    |   'DIVIDE' INT 'INTO' INT giving remainder
+    ;
+
+multiply
+    :   'MULTIPLY' INT 'BY' VAR+
+    |   'MULTIPLY' INT 'BY' INT giving
     ;
 
 giving
@@ -50,4 +63,12 @@ stop
 
 perform
     : 'PERFORM' procname
+    ;
+
+remainder
+    :   'REMAINDER' VAR
+    ;
+
+when
+    :   'WHEN' statement+
     ;

@@ -53,6 +53,18 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSubtract(BabyCobolParser.SubtractContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#divide}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDivide(BabyCobolParser.DivideContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#multiply}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiply(BabyCobolParser.MultiplyContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#giving}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -82,4 +94,16 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPerform(BabyCobolParser.PerformContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#remainder}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRemainder(BabyCobolParser.RemainderContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#when}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhen(BabyCobolParser.WhenContext ctx);
 }
