@@ -1,15 +1,43 @@
 lexer grammar BCTokens;
 
+COMPARISON_OPERATOR
+    :   '='
+    |   '>'
+    |   '<'
+    |   '>='
+    |   '<='
+    ;
+
+BOOLEAN_OPERATOR
+    :   'OR'
+    |   'AND'
+    |   'XOR'
+    ;
+
+ARITHMETIC_OPERATOR
+    :   '+'
+    |   '-'
+    |   '*'
+    |   '/'
+    |   '**'
+    ;
+
+IDENTIFIER
+    :   VAR ('-' VAR)* INT?
+    ;
+
 VAR
-    :   [a-zA-Z][a-zA-Z0-9-]*
+    :   [a-zA-Z]+
     ;
 
 INT
     :   [0-9]+
     ;
 
-WS
-    :   [ \t\r\n\f]+ -> skip
+DOT
+    :   '.'
     ;
 
-DOT: '.';
+WS
+    :   [ \r\n\t\f]+ -> skip
+    ;

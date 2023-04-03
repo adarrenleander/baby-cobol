@@ -65,11 +65,11 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiply(BabyCobolParser.MultiplyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BabyCobolParser#giving}.
+	 * Visit a parse tree produced by {@link BabyCobolParser#perform}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGiving(BabyCobolParser.GivingContext ctx);
+	T visitPerform(BabyCobolParser.PerformContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#display}.
 	 * @param ctx the parse tree
@@ -77,23 +77,17 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDisplay(BabyCobolParser.DisplayContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#stop}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStop(BabyCobolParser.StopContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BabyCobolParser#perform}.
+	 * Visit a parse tree produced by {@link BabyCobolParser#evaluate}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPerform(BabyCobolParser.PerformContext ctx);
+	T visitEvaluate(BabyCobolParser.EvaluateContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#remainder}.
 	 * @param ctx the parse tree
@@ -101,9 +95,57 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRemainder(BabyCobolParser.RemainderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BabyCobolParser#when}.
+	 * Visit a parse tree produced by {@link BabyCobolParser#giving}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWhen(BabyCobolParser.WhenContext ctx);
+	T visitGiving(BabyCobolParser.GivingContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#any_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAny_expression(BabyCobolParser.Any_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#arithmetic_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmetic_expression(BabyCobolParser.Arithmetic_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#string_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString_expression(BabyCobolParser.String_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#boolean_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean_expression(BabyCobolParser.Boolean_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#when_block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhen_block(BabyCobolParser.When_blockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#atomic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtomic(BabyCobolParser.AtomicContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#identifiers}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifiers(BabyCobolParser.IdentifiersContext ctx);
 }

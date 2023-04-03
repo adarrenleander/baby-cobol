@@ -5,70 +5,113 @@ program
     :   sentence+
     ;
 
-sentence : ((procname DOT)? statement+ DOT) ;
+sentence
+    :   ((procname DOT)? statement+ DOT)
+    ;
 
-procname: VAR;
+procname
+    :   identifiers
+    ;
 
 statement
     :   accept
     |   add
     |   subtract
+    |   divide
+    |   multiply
     |   perform
     |   display
     |   stop
-    |   divide
-    |   multiply
+    |   evaluate
     ;
 
 accept
-    :   'ACCEPT' VAR+
+    :   'ACCEPT' identifiers+
     ;
 
 add
-    :   'ADD' INT+ 'TO' VAR
+    :   'ADD' INT+ 'TO' identifiers
     |   'ADD' INT+ 'TO' INT giving
     ;
 
 subtract
-    :   'SUBTRACT' INT+ 'FROM' VAR
+    :   'SUBTRACT' INT+ 'FROM' identifiers
     |   'SUBTRACT' INT+ 'FROM' INT giving
     ;
 
 divide
-    :   'DIVIDE' INT 'INTO' VAR+
+    :   'DIVIDE' INT 'INTO' identifiers+
     |   'DIVIDE' INT 'INTO' INT giving
     |   'DIVIDE' INT 'INTO' INT giving remainder
     ;
 
 multiply
-    :   'MULTIPLY' INT 'BY' VAR+
+    :   'MULTIPLY' INT 'BY' identifiers+
     |   'MULTIPLY' INT 'BY' INT giving
     ;
 
-giving
-    :   'GIVING' VAR
+perform
+    :   'PERFORM' procname
     ;
 
 display
-    :   'DISPLAY' (INT|VAR)+ withnoadvancing?
-    ;
-
-withnoadvancing
-    : 'WITH NO ADVANCING'
+    :   'DISPLAY' atomic+ withnoadvancing?
     ;
 
 stop
-    : 'STOP'
+    :   'STOP'
     ;
 
-perform
-    : 'PERFORM' procname
+evaluate
+    :   'EVALUATE' any_expression when_block* 'END'
     ;
 
 remainder
-    :   'REMAINDER' VAR
+    :   'REMAINDER' identifiers
     ;
 
-when
-    :   'WHEN' statement+
+giving
+    :   'GIVING' identifiers
+    ;
+
+withnoadvancing
+    :   'WITH NO ADVANCING'
+    ;
+
+any_expression
+    :   arithmetic_expression
+    |   string_expression
+    |   boolean_expression
+    ;
+
+arithmetic_expression
+    :   atomic
+    |   arithmetic_expression ARITHMETIC_OPERATOR arithmetic_expression
+    ;
+
+string_expression
+    :   atomic
+    |   string_expression '+' string_expression
+    ;
+
+boolean_expression
+    :   'TRUE'
+    |   'FALSE'
+    |   arithmetic_expression COMPARISON_OPERATOR arithmetic_expression
+    |   'NOT' boolean_expression
+    |   boolean_expression BOOLEAN_OPERATOR boolean_expression
+    ;
+
+when_block
+    :   'WHEN' atomic statement+
+    |   'WHEN OTHER' statement+
+    ;
+
+atomic
+    :   identifiers
+    |   INT
+    ;
+
+identifiers
+    :   IDENTIFIER ('OF' IDENTIFIER)* ('(' INT ')')?
     ;

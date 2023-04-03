@@ -98,15 +98,15 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitMultiply(BabyCobolParser.MultiplyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BabyCobolParser#giving}.
+	 * Enter a parse tree produced by {@link BabyCobolParser#perform}.
 	 * @param ctx the parse tree
 	 */
-	void enterGiving(BabyCobolParser.GivingContext ctx);
+	void enterPerform(BabyCobolParser.PerformContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BabyCobolParser#giving}.
+	 * Exit a parse tree produced by {@link BabyCobolParser#perform}.
 	 * @param ctx the parse tree
 	 */
-	void exitGiving(BabyCobolParser.GivingContext ctx);
+	void exitPerform(BabyCobolParser.PerformContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#display}.
 	 * @param ctx the parse tree
@@ -118,16 +118,6 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitDisplay(BabyCobolParser.DisplayContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
-	 * @param ctx the parse tree
-	 */
-	void enterWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
-	 * @param ctx the parse tree
-	 */
-	void exitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#stop}.
 	 * @param ctx the parse tree
 	 */
@@ -138,15 +128,15 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitStop(BabyCobolParser.StopContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BabyCobolParser#perform}.
+	 * Enter a parse tree produced by {@link BabyCobolParser#evaluate}.
 	 * @param ctx the parse tree
 	 */
-	void enterPerform(BabyCobolParser.PerformContext ctx);
+	void enterEvaluate(BabyCobolParser.EvaluateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BabyCobolParser#perform}.
+	 * Exit a parse tree produced by {@link BabyCobolParser#evaluate}.
 	 * @param ctx the parse tree
 	 */
-	void exitPerform(BabyCobolParser.PerformContext ctx);
+	void exitEvaluate(BabyCobolParser.EvaluateContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#remainder}.
 	 * @param ctx the parse tree
@@ -158,13 +148,93 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitRemainder(BabyCobolParser.RemainderContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BabyCobolParser#when}.
+	 * Enter a parse tree produced by {@link BabyCobolParser#giving}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhen(BabyCobolParser.WhenContext ctx);
+	void enterGiving(BabyCobolParser.GivingContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BabyCobolParser#when}.
+	 * Exit a parse tree produced by {@link BabyCobolParser#giving}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhen(BabyCobolParser.WhenContext ctx);
+	void exitGiving(BabyCobolParser.GivingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
+	 * @param ctx the parse tree
+	 */
+	void enterWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#withnoadvancing}.
+	 * @param ctx the parse tree
+	 */
+	void exitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#any_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAny_expression(BabyCobolParser.Any_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#any_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAny_expression(BabyCobolParser.Any_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#arithmetic_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithmetic_expression(BabyCobolParser.Arithmetic_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#arithmetic_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithmetic_expression(BabyCobolParser.Arithmetic_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#string_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterString_expression(BabyCobolParser.String_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#string_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitString_expression(BabyCobolParser.String_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#boolean_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolean_expression(BabyCobolParser.Boolean_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#boolean_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolean_expression(BabyCobolParser.Boolean_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#when_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhen_block(BabyCobolParser.When_blockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#when_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhen_block(BabyCobolParser.When_blockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#atomic}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtomic(BabyCobolParser.AtomicContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#atomic}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtomic(BabyCobolParser.AtomicContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#identifiers}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifiers(BabyCobolParser.IdentifiersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#identifiers}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifiers(BabyCobolParser.IdentifiersContext ctx);
 }
