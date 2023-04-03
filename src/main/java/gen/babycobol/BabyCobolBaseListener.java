@@ -101,6 +101,30 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDivide(BabyCobolParser.DivideContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDivide(BabyCobolParser.DivideContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiply(BabyCobolParser.MultiplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiply(BabyCobolParser.MultiplyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterGiving(BabyCobolParser.GivingContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -156,6 +180,30 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPerform(BabyCobolParser.PerformContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRemainder(BabyCobolParser.RemainderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRemainder(BabyCobolParser.RemainderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhen(BabyCobolParser.WhenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhen(BabyCobolParser.WhenContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

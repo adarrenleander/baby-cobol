@@ -106,4 +106,61 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
 
         return visit(procNames.get(name));
     }
+
+    @Override public Void visitMultiply(BabyCobolParser.MultiplyContext ctx) {
+        String key;
+        int newValue;
+        int limit = ctx.VAR().size();
+
+        if (ctx.giving() == null) {
+            for (int i = 0; i < limit; i++) {
+                key = ctx.VAR().get(i).getText();
+                newValue = variableMap.get(ctx.VAR().get(i).getText());
+                newValue *= Integer.parseInt(ctx.INT().get(0).getText().trim());
+                variableMap.put(key, newValue);
+            }
+        } else {
+            key = ctx.giving().VAR().getText();
+            newValue = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim());
+            newValue *= Integer.parseInt(ctx.INT().get(0).getText().trim());
+            variableMap.put(key, newValue);
+        }
+        System.out.println(variableMap);
+        return defaultResult();
+    }
+
+    @Override public Void visitDivide(BabyCobolParser.DivideContext ctx) {
+        String key;
+        String keyRemainder;
+        int remainder;
+        int newValue;
+        int limit = ctx.VAR().size();
+
+        if (ctx.remainder() == null){
+            if (ctx.giving() == null) {
+                for (int i = 0; i < limit; i++) {
+                    key = ctx.VAR().get(i).getText();
+                    newValue = variableMap.get(ctx.VAR().get(i).getText());
+                    newValue /= Integer.parseInt(ctx.INT().get(0).getText().trim());
+                    variableMap.put(key, newValue);
+                }
+            } else {
+                key = ctx.giving().VAR().getText();
+                newValue = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim());
+                newValue /= Integer.parseInt(ctx.INT().get(0).getText().trim());
+                variableMap.put(key, newValue);
+            }
+        } else {
+            key = ctx.giving().VAR().getText();
+            newValue = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim());
+            newValue /= Integer.parseInt(ctx.INT().get(0).getText().trim());
+            variableMap.put(key, newValue);
+            keyRemainder = ctx.remainder().VAR().getText();
+            remainder = Integer.parseInt(ctx.INT().get(ctx.INT().size()-1).getText().trim()) % Integer.parseInt(ctx.INT().get(0).getText().trim());
+            variableMap.put(keyRemainder, remainder);
+        }
+
+        System.out.println(variableMap);
+        return defaultResult();
+    }
 }

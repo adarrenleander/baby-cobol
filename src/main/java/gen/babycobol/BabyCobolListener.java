@@ -78,6 +78,26 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitSubtract(BabyCobolParser.SubtractContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#divide}.
+	 * @param ctx the parse tree
+	 */
+	void enterDivide(BabyCobolParser.DivideContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#divide}.
+	 * @param ctx the parse tree
+	 */
+	void exitDivide(BabyCobolParser.DivideContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#multiply}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiply(BabyCobolParser.MultiplyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#multiply}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiply(BabyCobolParser.MultiplyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#giving}.
 	 * @param ctx the parse tree
 	 */
@@ -127,4 +147,24 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPerform(BabyCobolParser.PerformContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#remainder}.
+	 * @param ctx the parse tree
+	 */
+	void enterRemainder(BabyCobolParser.RemainderContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#remainder}.
+	 * @param ctx the parse tree
+	 */
+	void exitRemainder(BabyCobolParser.RemainderContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#when}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhen(BabyCobolParser.WhenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#when}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhen(BabyCobolParser.WhenContext ctx);
 }
