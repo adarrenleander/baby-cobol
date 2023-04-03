@@ -168,6 +168,23 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitIf(BabyCobolParser.IfContext ctx) {
+        boolean condition = (boolean)visit(ctx.boolean_expression());
+        if (condition) {
+            for (BabyCobolParser.StatementContext s : ctx.i) {
+                visit(s);
+            }
+        } else {
+            if (ctx.e != null) {
+                for (BabyCobolParser.StatementContext s : ctx.e) {
+                    visit(s);
+                }
+            }
+        }
+        return defaultResult();
+    }
+
+    @Override
     public Object visitEvaluate(BabyCobolParser.EvaluateContext ctx) {
         Object condition = visit(ctx.any_expression());
 

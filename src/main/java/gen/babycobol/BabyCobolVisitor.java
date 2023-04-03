@@ -83,6 +83,12 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStop(BabyCobolParser.StopContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#if}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIf(BabyCobolParser.IfContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#evaluate}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

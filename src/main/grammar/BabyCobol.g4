@@ -22,6 +22,7 @@ statement
     |   perform
     |   display
     |   stop
+    |   if
     |   evaluate
     ;
 
@@ -60,6 +61,10 @@ display
 
 stop
     :   'STOP'
+    ;
+
+if
+    :   'IF' boolean_expression 'THEN' i+=statement+ ('ELSE' e+=statement+)? 'END'
     ;
 
 evaluate
