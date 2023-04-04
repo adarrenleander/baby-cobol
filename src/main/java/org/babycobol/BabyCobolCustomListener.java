@@ -1,8 +1,8 @@
 package org.babycobol;
 
-import gen.babycobol.BabyCobolBaseListener;
-import gen.babycobol.BabyCobolParser;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.babycobol.parser.BabyCobolBaseListener;
+import org.babycobol.parser.BabyCobolParser;
 
 import java.util.HashMap;
 import java.util.Map;

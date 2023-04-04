@@ -1,19 +1,19 @@
 package org.babycobol;
 
-import gen.babycobol.BabyCobolBaseVisitor;
-import gen.babycobol.BabyCobolParser;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.babycobol.exception.ExecutionStoppedException;
-import org.babycobol.exception.NextSentenceException;
+import org.babycobol.parser.BabyCobolBaseVisitor;
+import org.babycobol.parser.BabyCobolParser;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 // add overrides of visitor functions here
-public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
+public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Void> {
     private final Map<String, Integer> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
+    private final VariableParser varParser = new VariableParser();
 
     public BabyCobolCustomVisitor(Map<String, ParseTree> procNames) {
         this.procNames = procNames;

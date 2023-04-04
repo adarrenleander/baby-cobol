@@ -1,9 +1,8 @@
 package org.babycobol;
 
-import gen.babycobol.BabyCobolLexer;
-import gen.babycobol.BabyCobolParser;
 import org.antlr.v4.runtime.*;
-import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.parser.BabyCobolLexer;
+import org.babycobol.parser.BabyCobolParser;
 
 import java.io.IOException;
 import java.util.logging.Level;
