@@ -18,6 +18,36 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitProgram(BabyCobolParser.ProgramContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#identification_division}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentification_division(BabyCobolParser.Identification_divisionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#identification_division}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentification_division(BabyCobolParser.Identification_divisionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#data_divison}.
+	 * @param ctx the parse tree
+	 */
+	void enterData_divison(BabyCobolParser.Data_divisonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#data_divison}.
+	 * @param ctx the parse tree
+	 */
+	void exitData_divison(BabyCobolParser.Data_divisonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#procedure_division}.
+	 * @param ctx the parse tree
+	 */
+	void enterProcedure_division(BabyCobolParser.Procedure_divisionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#procedure_division}.
+	 * @param ctx the parse tree
+	 */
+	void exitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#sentence}.
 	 * @param ctx the parse tree
 	 */

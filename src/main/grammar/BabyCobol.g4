@@ -2,7 +2,19 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   sentence+
+    :   identification_division (data_divison)? procedure_division EOF
+    ;
+
+identification_division
+    :   'IDENTIFICATION DIVISION.' (IDENTIFIER DOT LITERAL DOT)*
+    ;
+
+data_divison
+    :   'DATA DIVISION.' (INT IDENTIFIER DOT)*
+    ;
+
+procedure_division
+    :   'PROCEDURE DIVISION.' sentence+
     ;
 
 sentence
@@ -115,6 +127,7 @@ when_block
 atomic
     :   identifiers
     |   INT
+    |   LITERAL
     ;
 
 identifiers
