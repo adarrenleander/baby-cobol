@@ -3,6 +3,7 @@ package org.babycobol;
 import gen.babycobol.BabyCobolLexer;
 import gen.babycobol.BabyCobolParser;
 import org.antlr.v4.runtime.*;
+import org.babycobol.exception.ExecutionStoppedException;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ public class Main {
             visitor.visit(program);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
-        } catch (ExectionStoppedException ex) {
+        } catch (ExecutionStoppedException ex) {
             logger.log(Level.FINE, "execution stopped");
         }
     }

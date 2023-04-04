@@ -245,6 +245,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNext_sentence(BabyCobolParser.Next_sentenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNext_sentence(BabyCobolParser.Next_sentenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRemainder(BabyCobolParser.RemainderContext ctx) { }
 	/**
 	 * {@inheritDoc}

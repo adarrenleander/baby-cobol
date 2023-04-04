@@ -3,6 +3,8 @@ package org.babycobol;
 import gen.babycobol.BabyCobolBaseVisitor;
 import gen.babycobol.BabyCobolParser;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.exception.NextSentenceException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,7 +101,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitStop(BabyCobolParser.StopContext ctx) {
-        throw new ExectionStoppedException("Stopped");
+        throw new ExecutionStoppedException("Stopped");
     }
 
     @Override
@@ -310,6 +312,21 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
         System.out.println(variableMap);
+        return defaultResult();
+    }
+
+    @Override
+    public Object visitNext_sentence(BabyCobolParser.Next_sentenceContext ctx) throws NextSentenceException {
+        throw new NextSentenceException("Next sentence triggered");
+    }
+
+    @Override
+    public Object visitSentence(BabyCobolParser.SentenceContext ctx) {
+        try {
+            visitChildren(ctx);
+        } catch (NextSentenceException e) {
+            return defaultResult();
+        }
         return defaultResult();
     }
 }

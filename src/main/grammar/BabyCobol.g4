@@ -44,6 +44,7 @@ statement
     |   stop
     |   if
     |   evaluate
+    |   next_sentence
     ;
 
 accept
@@ -89,6 +90,10 @@ if
 
 evaluate
     :   'EVALUATE' any_expression when_block* 'END'
+    ;
+
+next_sentence
+    :   'NEXT SENTENCE'
     ;
 
 remainder
