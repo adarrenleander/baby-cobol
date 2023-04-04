@@ -1,8 +1,1 @@
-IF TRUE
-    THEN
-        DISPLAY 1234
-        DISPLAY 4321
-    ELSE
-        DISPLAY 9999
-        DISPLAY 0000
-    END.
+ACCEPT A B C D E F.

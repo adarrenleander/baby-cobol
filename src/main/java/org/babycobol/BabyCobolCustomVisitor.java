@@ -216,7 +216,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             return false;
         }
 
-        if (!ctx.arithmetic_expression().isEmpty()) {
+        if (ctx.arithmetic_expression() != null) {
             int left = (int)visit(ctx.arithmetic_expression(0));
             int right = (int)visit(ctx.arithmetic_expression(1));
 
@@ -243,7 +243,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             return !(boolean)visit(ctx.boolean_expression(0));
         }
 
-        if (!ctx.boolean_expression().isEmpty()) {
+        if (ctx.boolean_expression() != null) {
             Boolean left = (boolean)visit(ctx.boolean_expression(0));
             Boolean right = (boolean)visit(ctx.boolean_expression(1));
             switch (ctx.BOOLEAN_OPERATOR().getText()) {
@@ -264,7 +264,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitArithmetic_expression(BabyCobolParser.Arithmetic_expressionContext ctx) {
-        if (!ctx.atomic().isEmpty()) {
+        if (ctx.atomic() != null) {
             if (ctx.atomic().INT() != null) {
                 return Integer.parseInt(ctx.atomic().INT().getText());
             }
