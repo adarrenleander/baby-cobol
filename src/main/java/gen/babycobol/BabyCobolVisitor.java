@@ -131,6 +131,12 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNext_sentence(BabyCobolParser.Next_sentenceContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#loop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop(BabyCobolParser.LoopContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#remainder}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -148,6 +154,34 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code loop_varying_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code loop_while_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code loop_until_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code loop_statement_expession}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_statement_expession(BabyCobolParser.Loop_statement_expessionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#any_expression}.
 	 * @param ctx the parse tree

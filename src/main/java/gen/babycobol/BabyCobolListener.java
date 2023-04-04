@@ -208,6 +208,16 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 */
 	void exitNext_sentence(BabyCobolParser.Next_sentenceContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BabyCobolParser#loop}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop(BabyCobolParser.LoopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BabyCobolParser#loop}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop(BabyCobolParser.LoopContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#remainder}.
 	 * @param ctx the parse tree
 	 */
@@ -237,6 +247,54 @@ public interface BabyCobolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code loop_varying_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code loop_varying_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code loop_while_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code loop_while_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code loop_until_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code loop_until_expression}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code loop_statement_expession}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_statement_expession(BabyCobolParser.Loop_statement_expessionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code loop_statement_expession}
+	 * labeled alternative in {@link BabyCobolParser#loop_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_statement_expession(BabyCobolParser.Loop_statement_expessionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BabyCobolParser#any_expression}.
 	 * @param ctx the parse tree

@@ -329,4 +329,32 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         return defaultResult();
     }
+
+    @Override public Object visitLoop(BabyCobolParser.LoopContext ctx) {
+        while (true) {
+            try {
+                visitChildren(ctx);
+            } catch (NextSentenceException e) {
+                return defaultResult();
+            }
+        }
+    }
+
+    @Override
+    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws NextSentenceException {
+        boolean condition = (boolean)visit(ctx.boolean_expression());
+        if (!condition) {
+            throw new NextSentenceException("Exit While Loop");
+        }
+        return defaultResult();
+    }
+
+    @Override
+    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) {
+        boolean condition = (boolean)visit(ctx.boolean_expression());
+        if (condition) {
+            throw new NextSentenceException("Exit Until Loop");
+        }
+        return defaultResult();
+    }
 }
