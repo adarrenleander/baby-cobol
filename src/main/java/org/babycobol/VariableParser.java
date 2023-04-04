@@ -17,30 +17,32 @@ public class VariableParser {
 
     public List<String> parseMultiVar(List<? extends TerminalNode> multivar, Collection<String> declaredNames) {
         Map<Integer, List<Integer>> matches = new HashMap<>();
-        matches.put(0, new ArrayList<>()); // position 0 has no matches
+        matches.put(0, new ArrayList<>()); // currentIdx 0 has no matches
 
         Map<Integer, Integer> counts = new HashMap<>();
         counts.put(0, 1); // sentinel
 
         StringBuilder combined = new StringBuilder();
-        int position = 0;
+        int currentIdx = 0;
 
         List<String> varNames = multivar.stream().map(ParseTree::getText).toList();
 
         for (String name : varNames) {
             combined.append(name);
-            position += name.length();
+            currentIdx += name.length();
 
             var currentMatches = new ArrayList<Integer>();
-            matches.put(position, currentMatches);
+            matches.put(currentIdx, currentMatches);
 
             for (Map.Entry<Integer, Integer> e : new HashSet<>(counts.entrySet())) {
-                int previous = e.getKey();
-                if (declaredNames.contains(combined.substring(previous, position))){
-                    currentMatches.add(previous);
-                    counts.merge(position, e.getValue(), Integer::sum);
+                int precedingIdx = e.getKey();
+                int precedingCount = e.getValue();
+                if (precedingCount > 0 && declaredNames.contains(combined.substring(precedingIdx, currentIdx))) {
+                    currentMatches.add(precedingIdx);
+                    counts.merge(currentIdx, precedingCount, Integer::sum);
                 }
             }
+
         }
 
         if (counts.get(combined.length()) == 1) {

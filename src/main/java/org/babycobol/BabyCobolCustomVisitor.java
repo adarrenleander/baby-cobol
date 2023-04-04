@@ -7,6 +7,7 @@ import org.babycobol.parser.BabyCobolBaseVisitor;
 import org.babycobol.parser.BabyCobolParser;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -335,19 +336,24 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitMove(BabyCobolParser.MoveContext ctx) {
-        String token = ctx.getChild(1).getText();
+
         int value;
-        if (Character.isAlphabetic(token.codePointAt(0))) {
-
-            value = variableMap.get(token);
+        if (ctx.INT() == null) {
+            String variableName = varParser.parseSingleVar(ctx.singlevar());
+            value = variableMap.get(variableName);
         } else {
-            value = Integer.parseInt(token);
+            value = Integer.parseInt(ctx.INT().getText());
         }
 
-        for (int idx = 3; idx < ctx.getChildCount(); idx++) {
-            token = ctx.getChild(idx).getText();
-            variableMap.put(token, value);
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().VAR(), variableMap.keySet());
+
+        if (varNames.isEmpty())
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().VAR());
+
+        for (String name : varNames) {
+            variableMap.put(name, value);
         }
+
         //System.out.println(variableMap);
         return defaultResult();
     }
