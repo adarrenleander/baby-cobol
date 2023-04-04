@@ -20,9 +20,12 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        // need to change so that only accepts variables defined in data division
-        for (int i = 0; i < ctx.identifiers().size(); i++) {
-            variableMap.put(ctx.identifiers(i).getText(), Integer.parseInt(sc.next()));
+        for (BabyCobolParser.IdentifiersContext i : ctx.identifiers()) {
+            if (variableMap.containsKey(i.getText())) {
+                variableMap.put(i.getText(), Integer.parseInt(sc.next()));
+            } else {
+                throw new RuntimeException("Variable not found");
+            }
         }
         System.out.println(variableMap);
         return defaultResult();
