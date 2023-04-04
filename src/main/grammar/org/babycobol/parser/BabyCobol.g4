@@ -2,59 +2,155 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   sentence+
+    :   identification_division (data_divison)? procedure_division EOF
     ;
 
-sentence : ((procname DOT)? statement+ DOT) ;
+identification_division
+    :   'IDENTIFICATION DIVISION.' (IDENTIFIER DOT LITERAL DOT)*
+    ;
 
-procname: VAR;
+data_divison
+    :   'DATA DIVISION.' variable*
+    ;
+
+variable
+    :   INT IDENTIFIER (occurs)? DOT
+    ;
+
+occurs
+    :   'OCCURS' INT 'TIMES'
+    ;
+
+procedure_division
+    :   'PROCEDURE DIVISION.' sentence+
+    ;
+
+sentence
+    :   ((procname DOT)? statement+ DOT)
+    ;
+
+procname
+    :   identifiers
+    ;
 
 statement
     :   accept
     |   add
     |   subtract
+    |   divide
+    |   multiply
     |   perform
     |   display
     |   stop
+    |   if
+    |   evaluate
+    |   next_sentence
     |   move
     ;
 
 accept
-    :   ACCEPT VAR+
+    :   ACCEPT identifiers+
     ;
 
 add
-    :   'ADD' INT+ 'TO' singlevar
+    :   'ADD' INT+ 'TO' identifiers
     |   'ADD' INT+ 'TO' INT giving
     ;
 
 subtract
-    :   'SUBTRACT' INT+ 'FROM' VAR
+    :   'SUBTRACT' INT+ 'FROM' identifiers
     |   'SUBTRACT' INT+ 'FROM' INT giving
     ;
 
-giving
-    :   'GIVING' singlevar
+divide
+    :   'DIVIDE' INT 'INTO' identifiers+
+    |   'DIVIDE' INT 'INTO' INT giving
+    |   'DIVIDE' INT 'INTO' INT giving remainder
     ;
 
-display
-    :   'DISPLAY' (INT|VAR)+ withnoadvancing?
-    ;
-
-withnoadvancing
-    : 'WITH NO ADVANCING'
-    ;
-
-stop
-    : 'STOP'
+multiply
+    :   'MULTIPLY' INT 'BY' identifiers+
+    |   'MULTIPLY' INT 'BY' INT giving
     ;
 
 perform
-    : 'PERFORM' procname
+    :   'PERFORM' procname
     ;
+
+display
+    :   'DISPLAY' atomic+ withnoadvancing?
+    ;
+
+stop
+    :   'STOP'
+    ;
+
+if
+    :   'IF' boolean_expression 'THEN' i+=statement+ ('ELSE' e+=statement+)? 'END'
+    ;
+
+evaluate
+    :   'EVALUATE' any_expression when_block* 'END'
+    ;
+
+next_sentence
+    :   'NEXT SENTENCE'
+    ;
+
 move
     :   MOVE (INT|singlevar) 'TO' multivar
     ;
 
 multivar : VAR+ ;
 singlevar : VAR+ ;
+
+remainder
+    :   'REMAINDER' identifiers
+    ;
+
+giving
+    :   'GIVING' identifiers
+    ;
+
+withnoadvancing
+    :   'WITH NO ADVANCING'
+    ;
+
+any_expression
+    :   arithmetic_expression
+    |   string_expression
+    |   boolean_expression
+    ;
+
+arithmetic_expression
+    :   atomic
+    |   arithmetic_expression ARITHMETIC_OPERATOR arithmetic_expression
+    ;
+
+string_expression
+    :   atomic
+    |   string_expression '+' string_expression
+    ;
+
+boolean_expression
+    :   'TRUE'
+    |   'FALSE'
+    |   arithmetic_expression COMPARISON_OPERATOR arithmetic_expression
+    |   'NOT' boolean_expression
+    |   boolean_expression BOOLEAN_OPERATOR boolean_expression
+    ;
+
+when_block
+    :   'WHEN' atomic statement+
+    |   'WHEN OTHER' statement+
+    ;
+
+atomic
+    :   identifiers
+    |   INT
+    |   LITERAL
+    ;
+
+identifiers
+    :   IDENTIFIER ('OF' IDENTIFIER)* ('(' INT ')')?
+    ;
