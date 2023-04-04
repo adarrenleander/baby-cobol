@@ -10,7 +10,15 @@ identification_division
     ;
 
 data_divison
-    :   'DATA DIVISION.' (INT IDENTIFIER DOT)*
+    :   'DATA DIVISION.' variable*
+    ;
+
+variable
+    :   INT IDENTIFIER (occurs)? DOT
+    ;
+
+occurs
+    :   'OCCURS' INT 'TIMES'
     ;
 
 procedure_division

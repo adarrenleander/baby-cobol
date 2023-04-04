@@ -29,6 +29,18 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitData_divison(BabyCobolParser.Data_divisonContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(BabyCobolParser.VariableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#occurs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOccurs(BabyCobolParser.OccursContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#procedure_division}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

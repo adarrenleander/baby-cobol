@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.locks.Condition;
 
 // add overrides of visitor functions here
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
@@ -21,6 +20,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
+        // need to change so that only accepts variables defined in data division
         for (int i = 0; i < ctx.identifiers().size(); i++) {
             variableMap.put(ctx.identifiers(i).getText(), Integer.parseInt(sc.next()));
         }
@@ -291,6 +291,22 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
+        return defaultResult();
+    }
+
+    @Override
+    public Object visitData_divison(BabyCobolParser.Data_divisonContext ctx) {
+        for (BabyCobolParser.VariableContext v : ctx.variable()) {
+            if (v.occurs() != null) {
+                int times = Integer.parseInt(v.occurs().INT().getText());
+                for (int i = 0; i < times; i++) {
+                    variableMap.put(v.IDENTIFIER().getText()+"["+i+"]", 0);
+                }
+            } else {
+                variableMap.put(v.IDENTIFIER().getText(), 0);
+            }
+        }
+        System.out.println(variableMap);
         return defaultResult();
     }
 }
