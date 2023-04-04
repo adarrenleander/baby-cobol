@@ -45,6 +45,7 @@ statement
     |   if
     |   evaluate
     |   next_sentence
+    |   move
     ;
 
 accept
@@ -94,6 +95,10 @@ evaluate
 
 next_sentence
     :   'NEXT SENTENCE'
+    ;
+
+move
+    :   'MOVE' atomic 'TO' IDENTIFIER+
     ;
 
 remainder
