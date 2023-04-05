@@ -269,6 +269,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLoop(BabyCobolParser.LoopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop(BabyCobolParser.LoopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRemainder(BabyCobolParser.RemainderContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -300,6 +312,54 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitWithnoadvancing(BabyCobolParser.WithnoadvancingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_statement_expession(BabyCobolParser.Loop_statement_expessionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_statement_expession(BabyCobolParser.Loop_statement_expessionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

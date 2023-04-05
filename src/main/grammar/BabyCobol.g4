@@ -46,6 +46,7 @@ statement
     |   evaluate
     |   next_sentence
     |   move
+    |   loop
     ;
 
 accept
@@ -101,6 +102,10 @@ move
     :   'MOVE' atomic 'TO' IDENTIFIER+
     ;
 
+loop
+    :   'LOOP' loop_expression* 'END'
+    ;
+
 remainder
     :   'REMAINDER' identifiers
     ;
@@ -111,6 +116,13 @@ giving
 
 withnoadvancing
     :   'WITH NO ADVANCING'
+    ;
+
+loop_expression
+    :   'VARYING' identifiers? ('FROM' from=atomic)? ('TO' to=atomic)? ('BY' by=atomic)?    #loop_varying_expression
+    |   'WHILE' boolean_expression                                                          #loop_while_expression
+    |   'UNTIL' boolean_expression                                                          #loop_until_expression
+    |   statement                                                                           #loop_statement_expession
     ;
 
 any_expression
