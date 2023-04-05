@@ -65,6 +65,18 @@ public class BabyCobolBaseListener implements BabyCobolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLike(BabyCobolParser.LikeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLike(BabyCobolParser.LikeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterOccurs(BabyCobolParser.OccursContext ctx) { }
 	/**
 	 * {@inheritDoc}

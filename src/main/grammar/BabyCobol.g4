@@ -14,7 +14,11 @@ data_divison
     ;
 
 variable
-    :   INT IDENTIFIER (occurs)? DOT
+    :   INT IDENTIFIER (like)? (occurs)? DOT
+    ;
+
+like
+    :   'LIKE' identifiers
     ;
 
 occurs
