@@ -26,7 +26,17 @@ occurs
     ;
 
 procedure_division
-    :   'PROCEDURE DIVISION.' sentence+
+    :   'PROCEDURE DIVISION' using? DOT sentence+
+    ;
+
+using
+    :   'USING' using_expression+
+    ;
+
+using_expression
+    :   'BY REFERENCE' identifiers
+    |   'BY CONTENT' atomic
+    |   'BY VALUE' atomic
     ;
 
 sentence

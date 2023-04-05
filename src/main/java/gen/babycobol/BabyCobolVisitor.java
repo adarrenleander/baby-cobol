@@ -53,6 +53,18 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#using}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUsing(BabyCobolParser.UsingContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#using_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUsing_expression(BabyCobolParser.Using_expressionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#sentence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
