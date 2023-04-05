@@ -2,7 +2,7 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   identification_division (data_divison)? procedure_division EOF
+    :   identification_division (data_divison)? procedure_division
     ;
 
 identification_division
@@ -26,11 +26,11 @@ procedure_division
     ;
 
 sentence
-    :   ((procname DOT)? statement+ DOT)
+    :   (procname DOT)? statement+ DOT
     ;
 
 procname
-    :   identifiers
+    :   IDENTIFIER
     ;
 
 statement
@@ -49,7 +49,16 @@ statement
     ;
 
 accept
-    :   ACCEPT identifiers+
+    :   accept_keyword IDENTIFIER+
+    ;
+
+accept_keyword
+    : 'ACCEPT'
+    | ('A' 'CCEPT')
+    | ('AC' 'CEPT')
+    | ('ACC' 'EPT')
+    | ('ACCE' 'PT')
+    | ('ACCEP' 'T')
     ;
 
 add
@@ -98,11 +107,18 @@ next_sentence
     ;
 
 move
-    :   MOVE (INT|singlevar) 'TO' multivar
+    :   move_keyword (INT | singlevar) 'TO' multivar
     ;
 
-multivar : VAR+ ;
-singlevar : VAR+ ;
+move_keyword
+    : 'MOVE'
+    | ('M' 'OVE')
+    | ('MO' 'VE')
+    | ('MOV' 'E')
+    ;
+
+multivar : IDENTIFIER+ ;
+singlevar : IDENTIFIER+ ;
 
 remainder
     :   'REMAINDER' identifiers

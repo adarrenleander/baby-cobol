@@ -24,12 +24,8 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        for (BabyCobolParser.IdentifiersContext i : ctx.identifiers()) {
-            if (variableMap.containsKey(i.getText())) {
-                variableMap.put(i.getText(), Integer.parseInt(sc.next()));
-            } else {
-                throw new RuntimeException("Variable not found");
-            }
+        for (int i = 0; i < ctx.IDENTIFIER().size(); i++) {
+            variableMap.put(ctx.IDENTIFIER().get(i).getText(), Integer.parseInt(sc.next()));
         }
         System.out.println(variableMap);
         return defaultResult();
@@ -345,10 +341,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             value = Integer.parseInt(ctx.INT().getText());
         }
 
-        List<String> varNames = varParser.parseMultiVar(ctx.multivar().VAR(), variableMap.keySet());
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
 
         if (varNames.isEmpty())
-            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().VAR());
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
 
         for (String name : varNames) {
             variableMap.put(name, value);

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class VariableParser {
 
     public String parseSingleVar(BabyCobolParser.SinglevarContext singlevar) {
-        return singlevar.VAR().stream()
+        return singlevar.IDENTIFIER().stream()
                 .map(ParseTree::getText)
                 .collect(Collectors.joining(""));
     }
