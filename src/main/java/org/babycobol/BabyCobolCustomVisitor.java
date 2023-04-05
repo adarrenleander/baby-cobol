@@ -1,6 +1,7 @@
 package org.babycobol;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
@@ -24,8 +25,12 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        for (int i = 0; i < ctx.IDENTIFIER().size(); i++) {
-            variableMap.put(ctx.IDENTIFIER().get(i).getText(), Integer.parseInt(sc.next()));
+        for (TerminalNode i : ctx.IDENTIFIER()) {
+            if (variableMap.containsKey(i.getText())) {
+                variableMap.put(i.getText(), Integer.parseInt(sc.next()));
+            } else {
+                throw new RuntimeException("Variable not found");
+            }
         }
         System.out.println(variableMap);
         return defaultResult();
