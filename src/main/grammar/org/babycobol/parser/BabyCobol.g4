@@ -72,12 +72,12 @@ accept
     ;
 
 accept_keyword
-    : 'ACCEPT'
-    | ('A' 'CCEPT')
-    | ('AC' 'CEPT')
-    | ('ACC' 'EPT')
-    | ('ACCE' 'PT')
-    | ('ACCEP' 'T')
+    :   'ACCEPT'
+    |   ('A' 'CCEPT')
+    |   ('AC' 'CEPT')
+    |   ('ACC' 'EPT')
+    |   ('ACCE' 'PT')
+    |   ('ACCEP' 'T')
     ;
 
 add
@@ -134,14 +134,19 @@ move
     ;
 
 move_keyword
-    : 'MOVE'
-    | ('M' 'OVE')
-    | ('MO' 'VE')
-    | ('MOV' 'E')
+    :   'MOVE'
+    |   ('M' 'OVE')
+    |   ('MO' 'VE')
+    |   ('MOV' 'E')
     ;
 
-multivar : IDENTIFIER+ ;
-singlevar : IDENTIFIER+ ;
+multivar
+    :   IDENTIFIER+
+    ;
+
+singlevar
+    :   IDENTIFIER+
+    ;
 
 remainder
     :   'REMAINDER' identifiers

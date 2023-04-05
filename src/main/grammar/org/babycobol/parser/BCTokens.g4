@@ -35,10 +35,26 @@ LITERAL
     :   '"' ~'"'+ '"'
     ;
 
-IDENTIFIER :   LETTER ( LETTER | DIGIT | '-' )* ;
-INT :   DIGIT+ ;
-SPACE : [ \t\r\n\f] -> skip ;
-DOT: '.';
+IDENTIFIER
+    :   LETTER ( LETTER | DIGIT | '-' )*
+    ;
 
-fragment LETTER : [a-zA-Z] ;
-fragment DIGIT : [0-9] ;
+INT
+    :   DIGIT+
+    ;
+
+SPACE
+    :   [ \t\r\n\f] -> skip
+    ;
+
+DOT
+    :   '.'
+    ;
+
+fragment LETTER
+    :   [a-zA-Z]
+    ;
+
+fragment DIGIT
+    :   [0-9]
+    ;
