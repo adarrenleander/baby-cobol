@@ -14,7 +14,15 @@ data_divison
     ;
 
 variable
-    :   INT IDENTIFIER (occurs)? DOT
+    :   INT IDENTIFIER (picture | like)? (occurs)? DOT
+    ;
+
+picture
+    :   'PICTURE IS' REPRESENTATION+
+    ;
+
+like
+    :   'LIKE' identifiers
     ;
 
 occurs
@@ -22,7 +30,17 @@ occurs
     ;
 
 procedure_division
-    :   'PROCEDURE DIVISION.' sentence+
+    :   'PROCEDURE DIVISION' using? DOT sentence+
+    ;
+
+using
+    :   'USING' using_expression+
+    ;
+
+using_expression
+    :   'BY REFERENCE' identifiers
+    |   'BY CONTENT' atomic
+    |   'BY VALUE' atomic
     ;
 
 sentence
@@ -46,6 +64,7 @@ statement
     |   evaluate
     |   next_sentence
     |   move
+    |   loop
     ;
 
 accept
@@ -106,6 +125,10 @@ next_sentence
     :   'NEXT SENTENCE'
     ;
 
+loop
+    :   'LOOP' loop_expression* 'END'
+    ;
+
 move
     :   move_keyword (INT | singlevar) 'TO' multivar
     ;
@@ -130,6 +153,13 @@ giving
 
 withnoadvancing
     :   'WITH NO ADVANCING'
+    ;
+
+loop_expression
+    :   'VARYING' identifiers? ('FROM' from=atomic)? ('TO' to=atomic)? ('BY' by=atomic)?    #loop_varying_expression
+    |   'WHILE' boolean_expression                                                          #loop_while_expression
+    |   'UNTIL' boolean_expression                                                          #loop_until_expression
+    |   statement                                                                           #loop_statement_expession
     ;
 
 any_expression
