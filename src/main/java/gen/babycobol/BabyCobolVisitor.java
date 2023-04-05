@@ -35,6 +35,12 @@ public interface BabyCobolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariable(BabyCobolParser.VariableContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BabyCobolParser#picture}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPicture(BabyCobolParser.PictureContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BabyCobolParser#like}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

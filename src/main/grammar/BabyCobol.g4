@@ -14,7 +14,11 @@ data_divison
     ;
 
 variable
-    :   INT IDENTIFIER (like)? (occurs)? DOT
+    :   INT IDENTIFIER (picture | like)? (occurs)? DOT
+    ;
+
+picture
+    :   'PICTURE IS' REPRESENTATION+
     ;
 
 like

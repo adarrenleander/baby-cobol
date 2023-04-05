@@ -302,6 +302,8 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitData_divison(BabyCobolParser.Data_divisonContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
+            // add logic for PICTURE clause using v.picture()
+
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {

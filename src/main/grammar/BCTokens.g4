@@ -1,5 +1,14 @@
 lexer grammar BCTokens;
 
+REPRESENTATION
+    :   '9'
+    |   'A'
+    |   'X'
+    |   'Z'
+    |   'S'
+    |   'V'
+    ;
+
 COMPARISON_OPERATOR
     :   '='
     |   '>'
