@@ -80,9 +80,17 @@ accept_keyword
     | ('ACCEP' 'T')
     ;
 
+
+
 add
-    :   'ADD' INT+ 'TO' identifiers
-    |   'ADD' INT+ 'TO' INT giving
+    :   add_keyword INT+ 'TO' identifiers
+    |   add_keyword INT+ 'TO' INT giving
+    ;
+
+add_keyword
+    : 'ADD'
+    | ('A' 'DD')
+    | ('AD' 'D')
     ;
 
 subtract
