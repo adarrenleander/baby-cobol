@@ -31,6 +31,10 @@ ARITHMETIC_OPERATOR
     |   '**'
     ;
 
+ADD : 'A' SPACE * 'D' SPACE* 'D' ;
+MOVE : 'M' SPACE * 'O' SPACE* 'V' SPACE* 'E' ;
+ACCEPT : 'A' SPACE * 'C' SPACE* 'C' SPACE* 'E' SPACE* 'P' SPACE* 'T' ;
+
 LITERAL
     :   '"' ~'"'+ '"'
     ;
