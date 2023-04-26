@@ -1,6 +1,6 @@
 lexer grammar BCTokens;
 
-REPRESENTATION
+REPRESENTATION  // these values can no longer be used as literals in the code
     :   '9'
     |   'A'
     |   'X'

@@ -3,6 +3,7 @@ package org.babycobol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
 import org.babycobol.parser.BabyCobolParser;
@@ -107,13 +108,21 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new ExecutionStoppedException("Stopped");
     }
 
+    public ParseTree getParseTreeFromProcName(String procName) {
+        if (!procNames.containsKey(procName))
+            throw new IllegalStateException("Compilation error: there is no sentence with name " + procName);
+
+        return procNames.get(procName);
+    }
+
     @Override
     public Object visitPerform(BabyCobolParser.PerformContext ctx) {
-        String name = ctx.procname().getText();
-        if (!procNames.containsKey(name))
-            throw new IllegalStateException("Compilation error: there is no sentence with name " + name);
+        return visit(getParseTreeFromProcName(ctx.procname().getText()));
+    }
 
-        return visit(procNames.get(name));
+    @Override
+    public Object visitGoto(BabyCobolParser.GotoContext ctx) throws GoToException {
+        throw new GoToException(ctx.procname().getText());
     }
 
     @Override
@@ -331,6 +340,23 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             visitChildren(ctx);
         } catch (NextSentenceException e) {
             return defaultResult();
+        }
+        return defaultResult();
+    }
+
+    @Override
+    public Object visitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            try {
+                visit(ctx.getChild(i));
+            } catch (GoToException e) {
+                for (int j = 0; j < ctx.getChildCount(); j++) {
+                    if (ctx.getChild(j).getText().startsWith(e.getMessage() + ".")) {
+                        i = j;
+                    }
+                }
+                visit(getParseTreeFromProcName(e.getMessage()));
+            }
         }
         return defaultResult();
     }

@@ -65,6 +65,7 @@ statement
     |   next_sentence
     |   move
     |   loop
+    |   goto
     ;
 
 accept
@@ -119,6 +120,10 @@ next_sentence
 
 loop
     :   'LOOP' loop_expression* 'END'
+    ;
+
+goto
+    :   'GO TO' procname
     ;
 
 move
