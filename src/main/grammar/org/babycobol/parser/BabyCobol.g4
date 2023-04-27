@@ -74,8 +74,8 @@ accept
 
 
 add
-    :   ADD INT+ 'TO' identifiers
-    |   ADD INT+ 'TO' INT giving
+    :   ADD additions+=INT+ 'TO' identifiers
+    |   ADD additions+=INT+ 'TO' base=INT giving
     ;
 
 subtract

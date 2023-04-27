@@ -94,21 +94,29 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     public Object visitAdd(BabyCobolParser.AddContext ctx) {
         String key;
         Value valueObj;
+        int newValue;
 
         if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
+            valueObj = variableMap.get(key);
+            newValue = Integer.parseInt(ctx.base.getText().trim());
         } else {
             key = ctx.identifiers().getText();
+            valueObj = variableMap.get(key);
+
+            if (valueObj.getValue() == null) {
+                newValue = 0;
+            } else {
+                newValue = Integer.parseInt(valueObj.getValue());
+            }
         }
 
-        valueObj = variableMap.get(key);
         if (!valueObj.isNumerical()) {
             throw new RuntimeException("Variable is not numerical");
         }
 
-        int newValue = valueObj.getValue() == null ? 0 : Integer.parseInt(valueObj.getValue());
-        for (int i = 0; i < ctx.INT().size(); i++) {
-            newValue += Integer.parseInt(ctx.INT(i).getText().trim());
+        for (int i = 0; i < ctx.additions.size(); i++) {
+            newValue += Integer.parseInt(ctx.additions.get(i).getText().trim());
         }
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
@@ -130,7 +138,12 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         } else {
             key = ctx.identifiers().getText();
             valueObj = variableMap.get(key);
-            newValue = Integer.parseInt(valueObj.getValue());
+
+            if (valueObj.getValue() == null) {
+                newValue = 0;
+            } else {
+                newValue = Integer.parseInt(valueObj.getValue());
+            }
         }
 
         if (!valueObj.isNumerical()) {
@@ -138,7 +151,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
 
         for (int i = 0; i < ctx.subtractors.size(); i++) {
-            newValue -= Integer.parseInt(ctx.INT(i).getText().trim());
+            newValue -= Integer.parseInt(ctx.subtractors.get(i).getText().trim());
         }
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
