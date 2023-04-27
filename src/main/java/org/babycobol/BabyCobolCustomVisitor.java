@@ -391,7 +391,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             if (ctx.atomic().INT() != null) {
                 return Integer.parseInt(ctx.atomic().INT().getText());
             }
-            return variableMap.get(ctx.atomic().identifiers().getText());
+            return Integer.parseInt(variableMap.get(ctx.atomic().identifiers().getText()).getValue());
         }
 
         Integer left = (int)visit(ctx.arithmetic_expression(0));
