@@ -254,41 +254,63 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-//    @Override
-//    public Object visitDivide(BabyCobolParser.DivideContext ctx) {
-//        String key;
-//        String keyRemainder;
-//        int remainder;
-//        int newObject;
-//        int limit = ctx.identifiers().size();
-//
-//        if (ctx.remainder() == null){
-//            if (ctx.giving() == null) {
-//                for (int i = 0; i < limit; i++) {
-//                    key = ctx.identifiers().get(i).getText();
-//                    newObject = variableMap.get(ctx.identifiers().get(i).getText());
-//                    newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-//                    variableMap.put(key, newObject);
-//                }
-//            } else {
-//                key = ctx.giving().identifiers().getText();
-//                newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-//                newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-//                variableMap.put(key, newObject);
-//            }
-//        } else {
-//            key = ctx.giving().identifiers().getText();
-//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-//            newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-//            variableMap.put(key, newObject);
-//            keyRemainder = ctx.remainder().identifiers().getText();
-//            remainder = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim()) % Integer.parseInt(ctx.INT(0).getText().trim());
-//            variableMap.put(keyRemainder, remainder);
-//        }
-//
-//        System.out.println(variableMap);
-//        return defaultResult();
-//    }
+    @Override
+    public Object visitDivide(BabyCobolParser.DivideContext ctx) {
+        String key;
+        String keyRemainder;
+        int newValue;
+        int remainder;
+        Value valueObj;
+
+        if (ctx.giving() == null) {
+            for (int i = 0; i < ctx.identifiers().size(); i++) {
+                key = ctx.identifiers().get(i).getText();
+
+                valueObj = variableMap.get(key);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
+                }
+
+                if (valueObj.getValue() == null) {
+                    throw new RuntimeException("Cannot divide an empty variable");
+                } else {
+                    newValue = Integer.parseInt(valueObj.getValue());
+                }
+
+                newValue /= Integer.parseInt(ctx.divisor.getText().trim());
+                valueObj.setValue(Integer.toString(newValue));
+                variableMap.put(key, valueObj);
+            }
+        } else {
+            key = ctx.giving().identifiers().getText();
+
+            valueObj = variableMap.get(key);
+            if (!valueObj.isNumerical()) {
+                throw new RuntimeException("Variable is not numerical");
+            }
+
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+            newValue /= Integer.parseInt(ctx.divisor.getText().trim());
+            valueObj.setValue(Integer.toString(newValue));
+            variableMap.put(key, valueObj);
+
+            if (ctx.remainder() != null) {
+                keyRemainder = ctx.remainder().identifiers().getText();
+
+                valueObj = variableMap.get(keyRemainder);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
+                }
+
+                remainder = Integer.parseInt(ctx.base.getText().trim()) % Integer.parseInt(ctx.divisor.getText().trim());
+                valueObj.setValue(Integer.toString(remainder));
+                variableMap.put(keyRemainder, valueObj);
+            }
+        }
+
+        printVariableMap();
+        return defaultResult();
+    }
 
     @Override
     public Object visitIf(BabyCobolParser.IfContext ctx) {

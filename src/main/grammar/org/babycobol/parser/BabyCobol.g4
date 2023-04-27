@@ -84,9 +84,9 @@ subtract
     ;
 
 divide
-    :   'DIVIDE' INT 'INTO' identifiers+
-    |   'DIVIDE' INT 'INTO' INT giving
-    |   'DIVIDE' INT 'INTO' INT giving remainder
+    :   'DIVIDE' divisor=INT 'INTO' identifiers+
+    |   'DIVIDE' divisor=INT 'INTO' base=INT giving
+    |   'DIVIDE' divisor=INT 'INTO' base=INT giving remainder
     ;
 
 multiply
