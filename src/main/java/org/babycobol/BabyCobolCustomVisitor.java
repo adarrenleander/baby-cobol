@@ -491,29 +491,36 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-//    @Override
-//    public Object visitMove(BabyCobolParser.MoveContext ctx) {
-//
-//        int value;
-//        if (ctx.INT() == null) {
-//            String variableName = varParser.parseSingleVar(ctx.singlevar());
-//            value = variableMap.get(variableName);
-//        } else {
-//            value = Integer.parseInt(ctx.INT().getText());
-//        }
-//
-//        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
-//
-//        if (varNames.isEmpty())
-//            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
-//
-//        for (String name : varNames) {
-//            variableMap.put(name, value);
-//        }
-//
-//        //System.out.println(variableMap);
-//        return defaultResult();
-//    }
+    @Override
+    public Object visitMove(BabyCobolParser.MoveContext ctx) {
+
+        String value;
+        if (ctx.INT() == null) {
+            String variableName = varParser.parseSingleVar(ctx.singlevar());
+            value = variableMap.get(variableName).getValue();
+        } else {
+            value = ctx.INT().getText();
+        }
+
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
+
+        if (varNames.isEmpty())
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
+
+        for (String name : varNames) {
+            Value currValue = variableMap.get(name);
+
+            if (!isConformsToPicture(value, currValue.getPicture())) {
+                throw new RuntimeException("Move value does not match picture");
+            }
+
+            currValue.setValue(value);
+            variableMap.put(name, currValue);
+        }
+
+        printVariableMap();
+        return defaultResult();
+    }
 
     boolean passFirstVaryingLoop = false;
     @Override public Object visitLoop(BabyCobolParser.LoopContext ctx) {
