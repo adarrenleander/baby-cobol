@@ -26,4 +26,13 @@ public class Value {
     public void setPicture(String picture) {
         this.picture = picture;
     }
+
+    public Boolean isNumerical() {
+        for (int i = 0; i < this.picture.length(); i++) {
+            if (this.picture.charAt(i) != '9' && this.picture.charAt(i) != 'Z') {
+                return false;
+            }
+        }
+        return true;
+    }
 }

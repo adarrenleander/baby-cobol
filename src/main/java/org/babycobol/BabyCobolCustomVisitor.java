@@ -93,47 +93,53 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAdd(BabyCobolParser.AddContext ctx) {
         String key;
-        int newObject = 0;
+        Value valueObj;
 
-        if (ctx.giving() == null) {
-            newObject = variableMap.get(ctx.identifiers().getText());
-            key = ctx.identifiers().getText();
-        } else {
+        if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
+        } else {
+            key = ctx.identifiers().getText();
         }
 
+        valueObj = variableMap.get(key);
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
+        }
+
+        int newValue = valueObj.getValue() == null ? 0 : Integer.parseInt(valueObj.getValue());
         for (int i = 0; i < ctx.INT().size(); i++) {
-            newObject += Integer.parseInt(ctx.INT(i).getText().trim());
+            newValue += Integer.parseInt(ctx.INT(i).getText().trim());
         }
-        variableMap.put(key, newObject);
+        valueObj.setValue(Integer.toString(newValue));
+        variableMap.put(key, valueObj);
 
-        System.out.println(variableMap);
+        printVariableMap();
         return defaultResult();
     }
 
-    @Override
-    public Object visitSubtract(BabyCobolParser.SubtractContext ctx) {
-        String key;
-        int newObject;
-        int limit = ctx.INT().size();
-
-        if (ctx.giving() == null) {
-            key = ctx.identifiers().getText();
-            newObject = variableMap.get(ctx.identifiers().getText());
-        } else {
-            key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            limit -= 1;
-        }
-
-        for (int i = 0; i < limit; i++) {
-            newObject -= Integer.parseInt(ctx.INT(i).getText().trim());
-        }
-        variableMap.put(key, newObject);
-
-        System.out.println(variableMap);
-        return defaultResult();
-    }
+//    @Override
+//    public Object visitSubtract(BabyCobolParser.SubtractContext ctx) {
+//        String key;
+//        int newObject;
+//        int limit = ctx.INT().size();
+//
+//        if (ctx.giving() == null) {
+//            key = ctx.identifiers().getText();
+//            newObject = variableMap.get(ctx.identifiers().getText());
+//        } else {
+//            key = ctx.giving().identifiers().getText();
+//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
+//            limit -= 1;
+//        }
+//
+//        for (int i = 0; i < limit; i++) {
+//            newObject -= Integer.parseInt(ctx.INT(i).getText().trim());
+//        }
+//        variableMap.put(key, newObject);
+//
+//        System.out.println(variableMap);
+//        return defaultResult();
+//    }
 
     @Override
     public Object visitDisplay(BabyCobolParser.DisplayContext ctx) {
@@ -178,64 +184,64 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new GoToException(ctx.procname().getText());
     }
 
-    @Override
-    public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
-        String key;
-        int newObject;
-        int limit = ctx.identifiers().size();
+//    @Override
+//    public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
+//        String key;
+//        int newObject;
+//        int limit = ctx.identifiers().size();
+//
+//        if (ctx.giving() == null) {
+//            for (int i = 0; i < limit; i++) {
+//                key = ctx.identifiers(i).getText();
+//                newObject = variableMap.get(ctx.identifiers(i).getText());
+//                newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
+//                variableMap.put(key, newObject);
+//            }
+//        } else {
+//            key = ctx.giving().identifiers().getText();
+//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
+//            newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
+//            variableMap.put(key, newObject);
+//        }
+//        System.out.println(variableMap);
+//        return defaultResult();
+//    }
 
-        if (ctx.giving() == null) {
-            for (int i = 0; i < limit; i++) {
-                key = ctx.identifiers(i).getText();
-                newObject = variableMap.get(ctx.identifiers(i).getText());
-                newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-                variableMap.put(key, newObject);
-            }
-        } else {
-            key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(key, newObject);
-        }
-        System.out.println(variableMap);
-        return defaultResult();
-    }
-
-    @Override
-    public Object visitDivide(BabyCobolParser.DivideContext ctx) {
-        String key;
-        String keyRemainder;
-        int remainder;
-        int newObject;
-        int limit = ctx.identifiers().size();
-
-        if (ctx.remainder() == null){
-            if (ctx.giving() == null) {
-                for (int i = 0; i < limit; i++) {
-                    key = ctx.identifiers().get(i).getText();
-                    newObject = variableMap.get(ctx.identifiers().get(i).getText());
-                    newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-                    variableMap.put(key, newObject);
-                }
-            } else {
-                key = ctx.giving().identifiers().getText();
-                newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-                newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-                variableMap.put(key, newObject);
-            }
-        } else {
-            key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(key, newObject);
-            keyRemainder = ctx.remainder().identifiers().getText();
-            remainder = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim()) % Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(keyRemainder, remainder);
-        }
-
-        System.out.println(variableMap);
-        return defaultResult();
-    }
+//    @Override
+//    public Object visitDivide(BabyCobolParser.DivideContext ctx) {
+//        String key;
+//        String keyRemainder;
+//        int remainder;
+//        int newObject;
+//        int limit = ctx.identifiers().size();
+//
+//        if (ctx.remainder() == null){
+//            if (ctx.giving() == null) {
+//                for (int i = 0; i < limit; i++) {
+//                    key = ctx.identifiers().get(i).getText();
+//                    newObject = variableMap.get(ctx.identifiers().get(i).getText());
+//                    newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
+//                    variableMap.put(key, newObject);
+//                }
+//            } else {
+//                key = ctx.giving().identifiers().getText();
+//                newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
+//                newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
+//                variableMap.put(key, newObject);
+//            }
+//        } else {
+//            key = ctx.giving().identifiers().getText();
+//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
+//            newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
+//            variableMap.put(key, newObject);
+//            keyRemainder = ctx.remainder().identifiers().getText();
+//            remainder = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim()) % Integer.parseInt(ctx.INT(0).getText().trim());
+//            variableMap.put(keyRemainder, remainder);
+//        }
+//
+//        System.out.println(variableMap);
+//        return defaultResult();
+//    }
 
     @Override
     public Object visitIf(BabyCobolParser.IfContext ctx) {
@@ -416,29 +422,29 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-    @Override
-    public Object visitMove(BabyCobolParser.MoveContext ctx) {
-
-        int value;
-        if (ctx.INT() == null) {
-            String variableName = varParser.parseSingleVar(ctx.singlevar());
-            value = variableMap.get(variableName);
-        } else {
-            value = Integer.parseInt(ctx.INT().getText());
-        }
-
-        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
-
-        if (varNames.isEmpty())
-            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
-
-        for (String name : varNames) {
-            variableMap.put(name, value);
-        }
-
-        //System.out.println(variableMap);
-        return defaultResult();
-    }
+//    @Override
+//    public Object visitMove(BabyCobolParser.MoveContext ctx) {
+//
+//        int value;
+//        if (ctx.INT() == null) {
+//            String variableName = varParser.parseSingleVar(ctx.singlevar());
+//            value = variableMap.get(variableName);
+//        } else {
+//            value = Integer.parseInt(ctx.INT().getText());
+//        }
+//
+//        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
+//
+//        if (varNames.isEmpty())
+//            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
+//
+//        for (String name : varNames) {
+//            variableMap.put(name, value);
+//        }
+//
+//        //System.out.println(variableMap);
+//        return defaultResult();
+//    }
 
     boolean passFirstVaryingLoop = false;
     @Override public Object visitLoop(BabyCobolParser.LoopContext ctx) {
@@ -452,36 +458,36 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
     }
 
-    @Override
-    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
-        int from = 1, by = 1;
-        int to = Integer.MAX_VALUE;
-
-        if (ctx.from != null) {
-            from = Integer.parseInt(ctx.from.INT().getText());
-        }
-        if (ctx.to != null) {
-            to = Integer.parseInt(ctx.to.INT().getText());
-        }
-        if (ctx.by != null) {
-            by = Integer.parseInt(ctx.by.INT().getText());
-        }
-
-        String loopVar = ctx.identifiers().getText();
-
-        if (!passFirstVaryingLoop) {
-            variableMap.put(loopVar, from);
-            passFirstVaryingLoop = true;
-        }
-
-        int loopIdx = variableMap.get(loopVar);
-        if (loopIdx > to) {
-            throw new NextSentenceException("Exit Varying Loop");
-        }
-        variableMap.put(loopVar, loopIdx + by);
-
-        return defaultResult();
-    }
+//    @Override
+//    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
+//        int from = 1, by = 1;
+//        int to = Integer.MAX_VALUE;
+//
+//        if (ctx.from != null) {
+//            from = Integer.parseInt(ctx.from.INT().getText());
+//        }
+//        if (ctx.to != null) {
+//            to = Integer.parseInt(ctx.to.INT().getText());
+//        }
+//        if (ctx.by != null) {
+//            by = Integer.parseInt(ctx.by.INT().getText());
+//        }
+//
+//        String loopVar = ctx.identifiers().getText();
+//
+//        if (!passFirstVaryingLoop) {
+//            variableMap.put(loopVar, from);
+//            passFirstVaryingLoop = true;
+//        }
+//
+//        int loopIdx = variableMap.get(loopVar);
+//        if (loopIdx > to) {
+//            throw new NextSentenceException("Exit Varying Loop");
+//        }
+//        variableMap.put(loopVar, loopIdx + by);
+//
+//        return defaultResult();
+//    }
 
     @Override
     public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws NextSentenceException {
