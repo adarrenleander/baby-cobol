@@ -2,14 +2,14 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   identification_division (data_divison)? procedure_division EOF
+    :   identification_division (data_division)? procedure_division EOF
     ;
 
 identification_division
     :   'IDENTIFICATION DIVISION.' (IDENTIFIER DOT LITERAL DOT)*
     ;
 
-data_divison
+data_division
     :   'DATA DIVISION.' variable*
     ;
 
@@ -18,7 +18,7 @@ variable
     ;
 
 picture
-    :   'PICTURE IS' REPRESENTATION+
+    :   'PICTURE IS' REPRESENTATION
     ;
 
 like

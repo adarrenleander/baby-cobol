@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 // add overrides of visitor functions here
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
-    private final Map<String, Integer> variableMap = new HashMap<>();
+    private final Map<String, Value> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
     private final VariableParser varParser = new VariableParser();
 
@@ -23,17 +23,70 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         this.procNames = procNames;
     }
 
+    // TODO: delete this
+    public void printVariableMap() {
+        for (String key : variableMap.keySet()) {
+            System.out.print(key + " = " + variableMap.get(key).getValue() + ", ");
+        }
+        System.out.println();
+    }
+
+    public Boolean isConformsToPicture(String value, String picture) {
+        if (value.length() != picture.length()) {
+            return false;
+        }
+
+        for (int i = 0; i < picture.length(); i++) {
+            Character c = value.charAt(0);
+
+            switch (picture.charAt(0)) {
+                case '9', 'Z' -> {   // any numerical digit
+                    try {
+                        Integer.parseInt(String.valueOf(c));
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+                case 'A' -> {   // any alphabetical character or whitespace
+                    if (!Character.isAlphabetic(c)) {
+                        return false;
+                    }
+                }
+                case 'S' -> {   // a sign, positive or negative, space is treated as a plus
+                    if (c.compareTo('+') != 0 && c.compareTo('-') != 0 && c.compareTo(' ') != 0) {
+                        return false;
+                    }
+                }
+                case 'V' -> {   // a decimal separator (usually . or ,)
+                    if (c.compareTo('.') != 0 && c.compareTo(',') != 0) {
+                        return false;
+                    }
+                }
+                // case 'X':   // any single character -> unhandled bcos can accept any character
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
         for (TerminalNode i : ctx.IDENTIFIER()) {
             if (variableMap.containsKey(i.getText())) {
-                variableMap.put(i.getText(), Integer.parseInt(sc.next()));
+                Value currValue = variableMap.get(i.getText());
+                Value newValue = new Value(sc.next(), currValue.getPicture());
+                if (isConformsToPicture(newValue.getValue(), currValue.getPicture())) {
+                    variableMap.put(i.getText(), newValue);
+                } else {
+                    throw new RuntimeException("Value does not match picture");
+                }
             } else {
                 throw new RuntimeException("Variable not found");
             }
         }
-        System.out.println(variableMap);
+
+        printVariableMap();
         return defaultResult();
     }
 
@@ -312,20 +365,22 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitData_divison(BabyCobolParser.Data_divisonContext ctx) {
+    public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
-            // add logic for PICTURE clause using v.picture()
+            String variable = v.IDENTIFIER().getText();
+            String picture = v.picture().REPRESENTATION().getText();
 
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {
-                    variableMap.put(v.IDENTIFIER().getText()+"["+i+"]", 0);
+                    variableMap.put(variable+"["+i+"]", new Value(null, picture));
                 }
             } else {
-                variableMap.put(v.IDENTIFIER().getText(), 0);
+                variableMap.put(variable, new Value(null, picture));
             }
         }
-        System.out.println(variableMap);
+
+        printVariableMap();
         return defaultResult();
     }
 
