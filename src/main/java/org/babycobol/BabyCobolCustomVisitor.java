@@ -117,29 +117,35 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-//    @Override
-//    public Object visitSubtract(BabyCobolParser.SubtractContext ctx) {
-//        String key;
-//        int newObject;
-//        int limit = ctx.INT().size();
-//
-//        if (ctx.giving() == null) {
-//            key = ctx.identifiers().getText();
-//            newObject = variableMap.get(ctx.identifiers().getText());
-//        } else {
-//            key = ctx.giving().identifiers().getText();
-//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-//            limit -= 1;
-//        }
-//
-//        for (int i = 0; i < limit; i++) {
-//            newObject -= Integer.parseInt(ctx.INT(i).getText().trim());
-//        }
-//        variableMap.put(key, newObject);
-//
-//        System.out.println(variableMap);
-//        return defaultResult();
-//    }
+    @Override
+    public Object visitSubtract(BabyCobolParser.SubtractContext ctx) {
+        String key;
+        Value valueObj;
+        int newValue;
+
+        if (ctx.giving() != null) {
+            key = ctx.giving().identifiers().getText();
+            valueObj = variableMap.get(key);
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+        } else {
+            key = ctx.identifiers().getText();
+            valueObj = variableMap.get(key);
+            newValue = Integer.parseInt(valueObj.getValue());
+        }
+
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
+        }
+
+        for (int i = 0; i < ctx.subtractors.size(); i++) {
+            newValue -= Integer.parseInt(ctx.INT(i).getText().trim());
+        }
+        valueObj.setValue(Integer.toString(newValue));
+        variableMap.put(key, valueObj);
+
+        printVariableMap();
+        return defaultResult();
+    }
 
     @Override
     public Object visitDisplay(BabyCobolParser.DisplayContext ctx) {

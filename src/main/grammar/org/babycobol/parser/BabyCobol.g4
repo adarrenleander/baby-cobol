@@ -79,8 +79,8 @@ add
     ;
 
 subtract
-    :   'SUBTRACT' INT+ 'FROM' identifiers
-    |   'SUBTRACT' INT+ 'FROM' INT giving
+    :   'SUBTRACT' subtractors+=INT+ 'FROM' identifiers
+    |   'SUBTRACT' subtractors+=INT+ 'FROM' base=INT giving
     ;
 
 divide
