@@ -90,8 +90,8 @@ divide
     ;
 
 multiply
-    :   'MULTIPLY' INT 'BY' identifiers+
-    |   'MULTIPLY' INT 'BY' INT giving
+    :   'MULTIPLY' multiplier=INT 'BY' identifiers+
+    |   'MULTIPLY' multiplier=INT 'BY' base=INT giving
     ;
 
 perform

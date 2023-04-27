@@ -98,21 +98,23 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
         if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
-            valueObj = variableMap.get(key);
-            newValue = Integer.parseInt(ctx.base.getText().trim());
         } else {
             key = ctx.identifiers().getText();
-            valueObj = variableMap.get(key);
+        }
 
+        valueObj = variableMap.get(key);
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
+        }
+
+        if (ctx.giving() != null) {
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+        } else {
             if (valueObj.getValue() == null) {
                 newValue = 0;
             } else {
                 newValue = Integer.parseInt(valueObj.getValue());
             }
-        }
-
-        if (!valueObj.isNumerical()) {
-            throw new RuntimeException("Variable is not numerical");
         }
 
         for (int i = 0; i < ctx.additions.size(); i++) {
@@ -133,12 +135,18 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
         if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
-            valueObj = variableMap.get(key);
-            newValue = Integer.parseInt(ctx.base.getText().trim());
         } else {
             key = ctx.identifiers().getText();
-            valueObj = variableMap.get(key);
+        }
 
+        valueObj = variableMap.get(key);
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
+        }
+
+        if (ctx.giving() != null) {
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+        } else {
             if (valueObj.getValue() == null) {
                 newValue = 0;
             } else {
@@ -203,28 +211,48 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new GoToException(ctx.procname().getText());
     }
 
-//    @Override
-//    public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
-//        String key;
-//        int newObject;
-//        int limit = ctx.identifiers().size();
-//
-//        if (ctx.giving() == null) {
-//            for (int i = 0; i < limit; i++) {
-//                key = ctx.identifiers(i).getText();
-//                newObject = variableMap.get(ctx.identifiers(i).getText());
-//                newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-//                variableMap.put(key, newObject);
-//            }
-//        } else {
-//            key = ctx.giving().identifiers().getText();
-//            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-//            newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-//            variableMap.put(key, newObject);
-//        }
-//        System.out.println(variableMap);
-//        return defaultResult();
-//    }
+    @Override
+    public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
+        String key;
+        Value valueObj;
+        int newValue;
+
+        if (ctx.giving() == null) {
+            for (int i = 0; i < ctx.identifiers().size(); i++) {
+                key = ctx.identifiers(i).getText();
+
+                valueObj = variableMap.get(key);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
+                }
+
+                if (valueObj.getValue() == null) {
+                    newValue = 0;
+                } else {
+                    newValue = Integer.parseInt(valueObj.getValue());
+                }
+
+                newValue *= Integer.parseInt(ctx.multiplier.getText().trim());
+                valueObj.setValue(Integer.toString(newValue));
+                variableMap.put(key, valueObj);
+            }
+        } else {
+            key = ctx.giving().identifiers().getText();
+
+            valueObj = variableMap.get(key);
+            if (!valueObj.isNumerical()) {
+                throw new RuntimeException("Variable is not numerical");
+            }
+
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+            newValue *= Integer.parseInt(ctx.multiplier.getText().trim());
+            valueObj.setValue(Integer.toString(newValue));
+            variableMap.put(key, valueObj);
+        }
+
+        printVariableMap();
+        return defaultResult();
+    }
 
 //    @Override
 //    public Object visitDivide(BabyCobolParser.DivideContext ctx) {
