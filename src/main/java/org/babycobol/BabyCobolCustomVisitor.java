@@ -37,9 +37,9 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
 
         for (int i = 0; i < picture.length(); i++) {
-            Character c = value.charAt(0);
+            Character c = value.charAt(i);
 
-            switch (picture.charAt(0)) {
+            switch (picture.charAt(i)) {
                 case '9', 'Z' -> {   // any numerical digit
                     try {
                         Integer.parseInt(String.valueOf(c));
@@ -167,7 +167,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             String token = ctx.getChild(idx).getText();
 
             if (Character.isAlphabetic(token.codePointAt(0))) {
-                System.out.print(variableMap.get(token));
+                System.out.print(variableMap.get(token).getValue());
                 System.out.print(" ");
             } else {
                 System.out.print(token);
