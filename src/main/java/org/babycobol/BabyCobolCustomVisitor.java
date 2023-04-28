@@ -451,8 +451,22 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
+            String picture;
             String variable = v.IDENTIFIER().getText();
-            String picture = v.picture().REPRESENTATION().getText();
+
+            if (v.picture() != null) {
+                picture = v.picture().REPRESENTATION().getText();
+            } else if (v.like() != null) {
+                Value likeValue = variableMap.get(v.like().identifiers().getText());
+                if (likeValue != null) {
+                    picture = likeValue.getPicture();
+                } else {
+                    throw new RuntimeException("Variable for LIKE does not exist");
+                }
+            } else {
+                throw new RuntimeException("Picture not defined");
+            }
+
 
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
