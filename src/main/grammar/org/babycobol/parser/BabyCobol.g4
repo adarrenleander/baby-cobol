@@ -2,14 +2,14 @@ grammar BabyCobol;
 import BCTokens;
 
 program
-    :   identification_division (data_divison)? procedure_division EOF
+    :   identification_division (data_division)? procedure_division EOF
     ;
 
 identification_division
     :   'IDENTIFICATION DIVISION.' (IDENTIFIER DOT LITERAL DOT)*
     ;
 
-data_divison
+data_division
     :   'DATA DIVISION.' variable*
     ;
 
@@ -18,7 +18,7 @@ variable
     ;
 
 picture
-    :   'PICTURE IS' REPRESENTATION+
+    :   'PICTURE IS' REPRESENTATION
     ;
 
 like
@@ -65,6 +65,7 @@ statement
     |   next_sentence
     |   move
     |   loop
+    |   goto
     ;
 
 accept
@@ -73,24 +74,24 @@ accept
 
 
 add
-    :   ADD INT+ 'TO' identifiers
-    |   ADD INT+ 'TO' INT giving
+    :   ADD additions+=INT+ 'TO' identifiers
+    |   ADD additions+=INT+ 'TO' base=INT giving
     ;
 
 subtract
-    :   'SUBTRACT' INT+ 'FROM' identifiers
-    |   'SUBTRACT' INT+ 'FROM' INT giving
+    :   'SUBTRACT' subtractors+=INT+ 'FROM' identifiers
+    |   'SUBTRACT' subtractors+=INT+ 'FROM' base=INT giving
     ;
 
 divide
-    :   'DIVIDE' INT 'INTO' identifiers+
-    |   'DIVIDE' INT 'INTO' INT giving
-    |   'DIVIDE' INT 'INTO' INT giving remainder
+    :   'DIVIDE' divisor=INT 'INTO' identifiers+
+    |   'DIVIDE' divisor=INT 'INTO' base=INT giving
+    |   'DIVIDE' divisor=INT 'INTO' base=INT giving remainder
     ;
 
 multiply
-    :   'MULTIPLY' INT 'BY' identifiers+
-    |   'MULTIPLY' INT 'BY' INT giving
+    :   'MULTIPLY' multiplier=INT 'BY' identifiers+
+    |   'MULTIPLY' multiplier=INT 'BY' base=INT giving
     ;
 
 perform
@@ -119,6 +120,10 @@ next_sentence
 
 loop
     :   'LOOP' loop_expression* 'END'
+    ;
+
+goto
+    :   'GO TO' IDENTIFIER
     ;
 
 move

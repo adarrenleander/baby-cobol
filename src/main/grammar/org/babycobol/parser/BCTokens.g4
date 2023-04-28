@@ -1,12 +1,7 @@
 lexer grammar BCTokens;
 
 REPRESENTATION
-    :   '9'
-    |   'A'
-    |   'X'
-    |   'Z'
-    |   'S'
-    |   'V'
+    :   REPR+
     ;
 
 COMPARISON_OPERATOR
@@ -61,4 +56,13 @@ fragment LETTER
 
 fragment DIGIT
     :   [0-9]
+    ;
+
+fragment REPR  // these values can no longer be used as literals in the code
+    :   '9'
+    |   'A'
+    |   'X'
+    |   'Z'
+    |   'S'
+    |   'V'
     ;

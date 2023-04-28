@@ -3,6 +3,7 @@ package org.babycobol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
 import org.babycobol.parser.BabyCobolParser;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 
 // add overrides of visitor functions here
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
-    private final Map<String, Integer> variableMap = new HashMap<>();
+    private final Map<String, Value> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
     private final VariableParser varParser = new VariableParser();
 
@@ -22,62 +23,148 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         this.procNames = procNames;
     }
 
+    // TODO: delete this
+    public void printVariableMap() {
+        for (String key : variableMap.keySet()) {
+            System.out.print(key + " = " + variableMap.get(key).getValue() + ", ");
+        }
+        System.out.println();
+    }
+
+    public Boolean isConformsToPicture(String value, String picture) {
+        if (value.length() != picture.length()) {
+            return false;
+        }
+
+        for (int i = 0; i < picture.length(); i++) {
+            Character c = value.charAt(i);
+
+            switch (picture.charAt(i)) {
+                case '9', 'Z' -> {   // any numerical digit
+                    try {
+                        Integer.parseInt(String.valueOf(c));
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+                case 'A' -> {   // any alphabetical character or whitespace
+                    if (!Character.isAlphabetic(c)) {
+                        return false;
+                    }
+                }
+                case 'S' -> {   // a sign, positive or negative, space is treated as a plus
+                    if (c.compareTo('+') != 0 && c.compareTo('-') != 0 && c.compareTo(' ') != 0) {
+                        return false;
+                    }
+                }
+                case 'V' -> {   // a decimal separator (usually . or ,)
+                    if (c.compareTo('.') != 0 && c.compareTo(',') != 0) {
+                        return false;
+                    }
+                }
+                // case 'X':   // any single character -> unhandled bcos can accept any character
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
         for (TerminalNode i : ctx.IDENTIFIER()) {
             if (variableMap.containsKey(i.getText())) {
-                variableMap.put(i.getText(), Integer.parseInt(sc.next()));
+                Value currValue = variableMap.get(i.getText());
+                Value newValue = new Value(sc.next(), currValue.getPicture());
+                if (isConformsToPicture(newValue.getValue(), currValue.getPicture())) {
+                    variableMap.put(i.getText(), newValue);
+                } else {
+                    throw new RuntimeException("Value does not match picture");
+                }
             } else {
                 throw new RuntimeException("Variable not found");
             }
         }
-        System.out.println(variableMap);
+
+        printVariableMap();
         return defaultResult();
     }
 
     @Override
     public Object visitAdd(BabyCobolParser.AddContext ctx) {
         String key;
-        int newObject = 0;
+        Value valueObj;
+        int newValue;
 
-        if (ctx.giving() == null) {
-            newObject = variableMap.get(ctx.identifiers().getText());
-            key = ctx.identifiers().getText();
-        } else {
+        if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
+        } else {
+            key = ctx.identifiers().getText();
         }
 
-        for (int i = 0; i < ctx.INT().size(); i++) {
-            newObject += Integer.parseInt(ctx.INT(i).getText().trim());
+        valueObj = variableMap.get(key);
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
         }
-        variableMap.put(key, newObject);
 
-        System.out.println(variableMap);
+        if (ctx.giving() != null) {
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+        } else {
+            if (valueObj.getValue() == null) {
+                newValue = 0;
+            } else {
+                newValue = Integer.parseInt(valueObj.getValue());
+            }
+        }
+
+        for (int i = 0; i < ctx.additions.size(); i++) {
+            newValue += Integer.parseInt(ctx.additions.get(i).getText().trim());
+        }
+        valueObj.setValue(Integer.toString(newValue));
+        variableMap.put(key, valueObj);
+
+        printVariableMap();
         return defaultResult();
     }
 
     @Override
     public Object visitSubtract(BabyCobolParser.SubtractContext ctx) {
         String key;
-        int newObject;
-        int limit = ctx.INT().size();
+        Value valueObj;
+        int newValue;
 
-        if (ctx.giving() == null) {
-            key = ctx.identifiers().getText();
-            newObject = variableMap.get(ctx.identifiers().getText());
-        } else {
+        if (ctx.giving() != null) {
             key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            limit -= 1;
+        } else {
+            key = ctx.identifiers().getText();
         }
 
-        for (int i = 0; i < limit; i++) {
-            newObject -= Integer.parseInt(ctx.INT(i).getText().trim());
+        valueObj = variableMap.get(key);
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
         }
-        variableMap.put(key, newObject);
 
-        System.out.println(variableMap);
+        if (ctx.giving() != null) {
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+        } else {
+            if (valueObj.getValue() == null) {
+                newValue = 0;
+            } else {
+                newValue = Integer.parseInt(valueObj.getValue());
+            }
+        }
+
+        if (!valueObj.isNumerical()) {
+            throw new RuntimeException("Variable is not numerical");
+        }
+
+        for (int i = 0; i < ctx.subtractors.size(); i++) {
+            newValue -= Integer.parseInt(ctx.subtractors.get(i).getText().trim());
+        }
+        valueObj.setValue(Integer.toString(newValue));
+        variableMap.put(key, valueObj);
+
+        printVariableMap();
         return defaultResult();
     }
 
@@ -88,7 +175,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             String token = ctx.getChild(idx).getText();
 
             if (Character.isAlphabetic(token.codePointAt(0))) {
-                System.out.print(variableMap.get(token));
+                System.out.print(variableMap.get(token).getValue());
                 System.out.print(" ");
             } else {
                 System.out.print(token);
@@ -107,35 +194,72 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new ExecutionStoppedException("Stopped");
     }
 
+    public ParseTree getParseTreeFromProcName(String procName) {
+        if (!procNames.containsKey(procName))
+            throw new IllegalStateException("Compilation error: there is no sentence with name " + procName);
+
+        return procNames.get(procName);
+    }
+
     @Override
     public Object visitPerform(BabyCobolParser.PerformContext ctx) {
-        String name = ctx.procname().getText();
-        if (!procNames.containsKey(name))
-            throw new IllegalStateException("Compilation error: there is no sentence with name " + name);
+        return visit(getParseTreeFromProcName(ctx.procname().getText()));
+    }
 
-        return visit(procNames.get(name));
+    @Override
+    public Object visitGoto(BabyCobolParser.GotoContext ctx) throws GoToException {
+        if (variableMap.containsKey(ctx.IDENTIFIER().getText())) {
+            String tempProcName = variableMap.get(ctx.IDENTIFIER().getText()).getValue();
+            if (procNames.containsKey(tempProcName)) {
+                throw new GoToException(tempProcName);
+            }
+        }
+        if (procNames.containsKey(ctx.IDENTIFIER().getText())) {
+            throw new GoToException(ctx.IDENTIFIER().getText());
+        }
+        throw new RuntimeException("Not a valid GO TO target");
     }
 
     @Override
     public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
         String key;
-        int newObject;
-        int limit = ctx.identifiers().size();
+        Value valueObj;
+        int newValue;
 
         if (ctx.giving() == null) {
-            for (int i = 0; i < limit; i++) {
+            for (int i = 0; i < ctx.identifiers().size(); i++) {
                 key = ctx.identifiers(i).getText();
-                newObject = variableMap.get(ctx.identifiers(i).getText());
-                newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-                variableMap.put(key, newObject);
+
+                valueObj = variableMap.get(key);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
+                }
+
+                if (valueObj.getValue() == null) {
+                    newValue = 0;
+                } else {
+                    newValue = Integer.parseInt(valueObj.getValue());
+                }
+
+                newValue *= Integer.parseInt(ctx.multiplier.getText().trim());
+                valueObj.setValue(Integer.toString(newValue));
+                variableMap.put(key, valueObj);
             }
         } else {
             key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            newObject *= Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(key, newObject);
+
+            valueObj = variableMap.get(key);
+            if (!valueObj.isNumerical()) {
+                throw new RuntimeException("Variable is not numerical");
+            }
+
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+            newValue *= Integer.parseInt(ctx.multiplier.getText().trim());
+            valueObj.setValue(Integer.toString(newValue));
+            variableMap.put(key, valueObj);
         }
-        System.out.println(variableMap);
+
+        printVariableMap();
         return defaultResult();
     }
 
@@ -143,35 +267,57 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     public Object visitDivide(BabyCobolParser.DivideContext ctx) {
         String key;
         String keyRemainder;
+        int newValue;
         int remainder;
-        int newObject;
-        int limit = ctx.identifiers().size();
+        Value valueObj;
 
-        if (ctx.remainder() == null){
-            if (ctx.giving() == null) {
-                for (int i = 0; i < limit; i++) {
-                    key = ctx.identifiers().get(i).getText();
-                    newObject = variableMap.get(ctx.identifiers().get(i).getText());
-                    newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-                    variableMap.put(key, newObject);
+        if (ctx.giving() == null) {
+            for (int i = 0; i < ctx.identifiers().size(); i++) {
+                key = ctx.identifiers().get(i).getText();
+
+                valueObj = variableMap.get(key);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
                 }
-            } else {
-                key = ctx.giving().identifiers().getText();
-                newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-                newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-                variableMap.put(key, newObject);
+
+                if (valueObj.getValue() == null) {
+                    throw new RuntimeException("Cannot divide an empty variable");
+                } else {
+                    newValue = Integer.parseInt(valueObj.getValue());
+                }
+
+                newValue /= Integer.parseInt(ctx.divisor.getText().trim());
+                valueObj.setValue(Integer.toString(newValue));
+                variableMap.put(key, valueObj);
             }
         } else {
             key = ctx.giving().identifiers().getText();
-            newObject = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim());
-            newObject /= Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(key, newObject);
-            keyRemainder = ctx.remainder().identifiers().getText();
-            remainder = Integer.parseInt(ctx.INT(ctx.INT().size()-1).getText().trim()) % Integer.parseInt(ctx.INT(0).getText().trim());
-            variableMap.put(keyRemainder, remainder);
+
+            valueObj = variableMap.get(key);
+            if (!valueObj.isNumerical()) {
+                throw new RuntimeException("Variable is not numerical");
+            }
+
+            newValue = Integer.parseInt(ctx.base.getText().trim());
+            newValue /= Integer.parseInt(ctx.divisor.getText().trim());
+            valueObj.setValue(Integer.toString(newValue));
+            variableMap.put(key, valueObj);
+
+            if (ctx.remainder() != null) {
+                keyRemainder = ctx.remainder().identifiers().getText();
+
+                valueObj = variableMap.get(keyRemainder);
+                if (!valueObj.isNumerical()) {
+                    throw new RuntimeException("Variable is not numerical");
+                }
+
+                remainder = Integer.parseInt(ctx.base.getText().trim()) % Integer.parseInt(ctx.divisor.getText().trim());
+                valueObj.setValue(Integer.toString(remainder));
+                variableMap.put(keyRemainder, valueObj);
+            }
         }
 
-        System.out.println(variableMap);
+        printVariableMap();
         return defaultResult();
     }
 
@@ -276,7 +422,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             if (ctx.atomic().INT() != null) {
                 return Integer.parseInt(ctx.atomic().INT().getText());
             }
-            return variableMap.get(ctx.atomic().identifiers().getText());
+            return Integer.parseInt(variableMap.get(ctx.atomic().identifiers().getText()).getValue());
         }
 
         Integer left = (int)visit(ctx.arithmetic_expression(0));
@@ -303,20 +449,22 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitData_divison(BabyCobolParser.Data_divisonContext ctx) {
+    public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
-            // add logic for PICTURE clause using v.picture()
+            String variable = v.IDENTIFIER().getText();
+            String picture = v.picture().REPRESENTATION().getText();
 
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {
-                    variableMap.put(v.IDENTIFIER().getText()+"["+i+"]", 0);
+                    variableMap.put(variable+"["+i+"]", new Value(null, picture));
                 }
             } else {
-                variableMap.put(v.IDENTIFIER().getText(), 0);
+                variableMap.put(variable, new Value(null, picture));
             }
         }
-        System.out.println(variableMap);
+
+        printVariableMap();
         return defaultResult();
     }
 
@@ -336,14 +484,31 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            try {
+                visit(ctx.getChild(i));
+            } catch (GoToException e) {
+                for (int j = 0; j < ctx.getChildCount(); j++) {
+                    if (ctx.getChild(j).getText().startsWith(e.getMessage() + ".")) {
+                        i = j;
+                    }
+                }
+                visit(getParseTreeFromProcName(e.getMessage()));
+            }
+        }
+        return defaultResult();
+    }
+
+    @Override
     public Object visitMove(BabyCobolParser.MoveContext ctx) {
 
-        int value;
+        String value;
         if (ctx.INT() == null) {
             String variableName = varParser.parseSingleVar(ctx.singlevar());
-            value = variableMap.get(variableName);
+            value = variableMap.get(variableName).getValue();
         } else {
-            value = Integer.parseInt(ctx.INT().getText());
+            value = ctx.INT().getText();
         }
 
         List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
@@ -352,10 +517,17 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
 
         for (String name : varNames) {
-            variableMap.put(name, value);
+            Value currValue = variableMap.get(name);
+
+            if (!isConformsToPicture(value, currValue.getPicture())) {
+                throw new RuntimeException("Move value does not match picture");
+            }
+
+            currValue.setValue(value);
+            variableMap.put(name, currValue);
         }
 
-        //System.out.println(variableMap);
+        printVariableMap();
         return defaultResult();
     }
 
@@ -375,6 +547,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
         int from = 1, by = 1;
         int to = Integer.MAX_VALUE;
+        String loopVar = ctx.identifiers().getText();
 
         if (ctx.from != null) {
             from = Integer.parseInt(ctx.from.INT().getText());
@@ -386,18 +559,27 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             by = Integer.parseInt(ctx.by.INT().getText());
         }
 
-        String loopVar = ctx.identifiers().getText();
-
         if (!passFirstVaryingLoop) {
-            variableMap.put(loopVar, from);
+            Value loopVarObj = variableMap.get(loopVar);
+            if (!loopVarObj.isNumerical()) {
+                throw new RuntimeException("Loop variable is not numerical");
+            }
+
+            loopVarObj.setValue(String.valueOf(from));
+            variableMap.put(loopVar, loopVarObj);
             passFirstVaryingLoop = true;
         }
 
-        int loopIdx = variableMap.get(loopVar);
+        Value loopVarObj = variableMap.get(loopVar);
+        if (!loopVarObj.isNumerical()) {
+            throw new RuntimeException("Loop variable is not numerical");
+        }
+        int loopIdx = Integer.parseInt(loopVarObj.getValue());
         if (loopIdx > to) {
             throw new NextSentenceException("Exit Varying Loop");
         }
-        variableMap.put(loopVar, loopIdx + by);
+        loopVarObj.setValue(String.valueOf(loopIdx + by));
+        variableMap.put(loopVar, loopVarObj);
 
         return defaultResult();
     }
