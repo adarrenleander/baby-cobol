@@ -123,7 +123,7 @@ loop
     ;
 
 goto
-    :   'GO TO' procname
+    :   'GO TO' IDENTIFIER
     ;
 
 move

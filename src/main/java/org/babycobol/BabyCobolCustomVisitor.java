@@ -208,7 +208,16 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitGoto(BabyCobolParser.GotoContext ctx) throws GoToException {
-        throw new GoToException(ctx.procname().getText());
+        if (variableMap.containsKey(ctx.IDENTIFIER().getText())) {
+            String tempProcName = variableMap.get(ctx.IDENTIFIER().getText()).getValue();
+            if (procNames.containsKey(tempProcName)) {
+                throw new GoToException(tempProcName);
+            }
+        }
+        if (procNames.containsKey(ctx.IDENTIFIER().getText())) {
+            throw new GoToException(ctx.IDENTIFIER().getText());
+        }
+        throw new RuntimeException("Not a valid GO TO target");
     }
 
     @Override
