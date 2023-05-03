@@ -58,7 +58,7 @@ fragment DIGIT
     :   [0-9]
     ;
 
-fragment REPR  // these values can no longer be used as literals in the code
+fragment REPR  // these values can no longer be used as variables/procnames in the code
     :   '9'
     |   'A'
     |   'X'
