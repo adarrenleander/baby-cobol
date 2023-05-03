@@ -66,12 +66,12 @@ statement
     |   move
     |   loop
     |   goto
+    |   alter
     ;
 
 accept
-    :    ACCEPT IDENTIFIER+
+    :   ACCEPT IDENTIFIER+
     ;
-
 
 add
     :   ADD additions+=INT+ 'TO' identifiers
@@ -124,6 +124,10 @@ loop
 
 goto
     :   'GO TO' IDENTIFIER
+    ;
+
+alter
+    :   'ALTER' procname 'TO PROCEED TO' procname
     ;
 
 move
