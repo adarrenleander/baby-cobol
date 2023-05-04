@@ -1,5 +1,6 @@
 grammar BabyCobol;
 import BCTokens;
+options { caseInsensitive = true; }
 
 program
     :   identification_division (data_division)? procedure_division EOF
