@@ -636,7 +636,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                 // OR
                 // make new parse tree for proc1
 
-                // TODO: fix implementation, behaving like a PERFORM
+                // TODO: fix implementation, currently behaving like a PERFORM
                 ParseTree tree = procNames.get(name2);
                 procNames.put(name1, tree);
             }
