@@ -3,6 +3,7 @@ package org.babycobol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.exception.ExitLoopException;
 import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
@@ -571,14 +572,14 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         while (true) {
             try {
                 visitChildren(ctx);
-            } catch (NextSentenceException e) {
+            } catch (NextSentenceException | ExitLoopException e) {
                 return defaultResult();
             }
         }
     }
 
     @Override
-    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
+    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws ExitLoopException {
         int from = 1, by = 1;
         int to = Integer.MAX_VALUE;
         String loopVar = ctx.identifiers().getText();
@@ -592,6 +593,9 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         if (ctx.by != null) {
             by = Integer.parseInt(ctx.by.INT().getText());
         }
+
+        from--;
+        to--;
 
         if (!passFirstVaryingLoop) {
             Value loopVarObj = variableMap.get(loopVar);
@@ -610,7 +614,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         int loopIdx = Integer.parseInt(loopVarObj.getValue());
         if (loopIdx > to) {
-            throw new NextSentenceException("Exit Varying Loop");
+            throw new ExitLoopException("Exit Varying Loop");
         }
         loopVarObj.setValue(String.valueOf(loopIdx + by));
         variableMap.put(loopVar, loopVarObj);
@@ -619,19 +623,19 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws NextSentenceException {
+    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws ExitLoopException {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (!condition) {
-            throw new NextSentenceException("Exit While Loop");
+            throw new ExitLoopException("Exit While Loop");
         }
         return defaultResult();
     }
 
     @Override
-    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) {
+    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) throws ExitLoopException {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (condition) {
-            throw new NextSentenceException("Exit Until Loop");
+            throw new ExitLoopException("Exit Until Loop");
         }
         return defaultResult();
     }
