@@ -448,6 +448,26 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
+    public String buildValueBasedOnPicture(String picture) {
+        StringBuilder value = new StringBuilder();
+
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9' -> {
+                    value.append('0');
+                }
+                case 'A', 'X', 'Z', 'S' -> {
+                    value.append(' ');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
+
+        return value.toString();
+    }
+
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
@@ -467,14 +487,14 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                 throw new RuntimeException("Picture not defined");
             }
 
-
+            String value = buildValueBasedOnPicture(picture);
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {
-                    variableMap.put(variable+"["+i+"]", new Value(null, picture));
+                    variableMap.put(variable+"["+i+"]", new Value(value, picture));
                 }
             } else {
-                variableMap.put(variable, new Value(null, picture));
+                variableMap.put(variable, new Value(value, picture));
             }
         }
 

@@ -173,3 +173,6 @@ Q. DISPLAY 2.
 STOP.
 
 COPY "test.bcbl" REPLACING ===DISPLAY=== BY ===ACCEPT===.
+
+accept b.
+display b.
