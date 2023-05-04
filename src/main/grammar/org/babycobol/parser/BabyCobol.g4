@@ -67,6 +67,7 @@ statement
     |   loop
     |   goto
     |   alter
+    |   copy
     ;
 
 accept
@@ -128,6 +129,18 @@ goto
 
 alter
     :   'ALTER' procname 'TO PROCEED TO' procname
+    ;
+
+copy
+    :   'COPY' LITERAL replacing?
+    ;
+
+replacing
+    :   'REPLACING' replacements+
+    ;
+
+replacements
+    :   COPY_LITERAL 'BY' COPY_LITERAL
     ;
 
 move

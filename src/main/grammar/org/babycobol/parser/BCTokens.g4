@@ -34,6 +34,10 @@ LITERAL
     :   '"' ~'"'+ '"'
     ;
 
+COPY_LITERAL
+    :   '===' ~'='+ '==='
+    ;
+
 IDENTIFIER
     :   LETTER ( LETTER | DIGIT | '-' )*
     ;
