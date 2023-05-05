@@ -39,7 +39,7 @@ COPY_LITERAL
     ;
 
 IDENTIFIER
-    :   LETTER ( LETTER | DIGIT | '-' )*
+    :   LETTER ( LETTER | DIGIT | '-' )* ( '(' DIGIT ')' )?
     ;
 
 INT

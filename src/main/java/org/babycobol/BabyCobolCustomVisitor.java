@@ -492,7 +492,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {
-                    variableMap.put(variable+"["+i+"]", new Value(value, picture));
+                    variableMap.put(variable+"("+i+")", new Value(value, picture));
                 }
             } else {
                 variableMap.put(variable, new Value(value, picture));
