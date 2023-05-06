@@ -76,7 +76,7 @@ statement
     ;
 
 accept
-    :   ACCEPT IDENTIFIER+
+    :   ACCEPT identifiers+
     ;
 
 add

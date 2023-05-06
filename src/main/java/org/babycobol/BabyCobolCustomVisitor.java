@@ -70,7 +70,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        for (TerminalNode i : ctx.IDENTIFIER()) {
+        for (BabyCobolParser.IdentifiersContext i : ctx.identifiers()) {
             if (variableMap.containsKey(i.getText())) {
                 Value currValue = variableMap.get(i.getText());
                 Value newValue = new Value(sc.next(), currValue.getPicture());
@@ -500,13 +500,13 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                         StringBuilder arrayVariable = new StringBuilder(variable.toString());
                         arrayVariable.append("(").append(j).append(")");
                         if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
-                            arrayVariable.append("OF ").append(currParent);
+                            arrayVariable.append("OF").append(currParent);
                         }
                         variableMap.put(arrayVariable.toString(), new Value(value, picture));
                     }
                 } else {
                     if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
-                        variable.append(" OF ").append(currParent);
+                        variable.append("OF").append(currParent);
                     }
                     variableMap.put(variable.toString(), new Value(value, picture));
                 }
