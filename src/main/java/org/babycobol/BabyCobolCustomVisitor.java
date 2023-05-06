@@ -9,10 +9,7 @@ import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
 import org.babycobol.parser.BabyCobolParser;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 // add overrides of visitor functions here
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
@@ -471,31 +468,48 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
-        for (BabyCobolParser.VariableContext v : ctx.variable()) {
-            String picture;
-            String variable = v.IDENTIFIER().getText();
+        String currParent = "";
+        int baseLevel = Integer.parseInt(ctx.variable(0).level().getText());
+        List<BabyCobolParser.VariableContext> v = ctx.variable();
+        for (int i = 0; i < v.size(); i++) {
+            if (Integer.parseInt(v.get(i).level().getText()) == baseLevel) {
+                currParent = v.get(i).IDENTIFIER().getText();
+            }
 
-            if (v.picture() != null) {
-                picture = v.picture().REPRESENTATION().getText();
-            } else if (v.like() != null) {
-                Value likeValue = variableMap.get(v.like().identifiers().getText());
+            String picture = "";
+            StringBuilder variable = new StringBuilder(v.get(i).IDENTIFIER().getText());
+
+            if (v.get(i).picture() != null) {
+                picture = v.get(i).picture().REPRESENTATION().getText();
+            } else if (v.get(i).like() != null) {
+                Value likeValue = variableMap.get(v.get(i).like().identifiers().getText());
                 if (likeValue != null) {
                     picture = likeValue.getPicture();
                 } else {
                     throw new RuntimeException("Variable for LIKE does not exist");
                 }
-            } else {
+            } else if (i+1 >= v.size() || (i+1 < v.size() && Integer.parseInt(v.get(i+1).level().getText()) == baseLevel)) {
                 throw new RuntimeException("Picture not defined");
             }
 
-            String value = buildValueBasedOnPicture(picture);
-            if (v.occurs() != null) {
-                int times = Integer.parseInt(v.occurs().INT().getText());
-                for (int i = 0; i < times; i++) {
-                    variableMap.put(variable+"("+i+")", new Value(value, picture));
+            if (!Objects.equals(picture, "")) {
+                String value = buildValueBasedOnPicture(picture);
+                if (v.get(i).occurs() != null) {
+                    int times = Integer.parseInt(v.get(i).occurs().INT().getText());
+                    for (int j = 0; j < times; j++) {
+                        StringBuilder arrayVariable = new StringBuilder(variable.toString());
+                        arrayVariable.append("(").append(j).append(")");
+                        if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
+                            arrayVariable.append("OF ").append(currParent);
+                        }
+                        variableMap.put(arrayVariable.toString(), new Value(value, picture));
+                    }
+                } else {
+                    if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
+                        variable.append(" OF ").append(currParent);
+                    }
+                    variableMap.put(variable.toString(), new Value(value, picture));
                 }
-            } else {
-                variableMap.put(variable, new Value(value, picture));
             }
         }
 

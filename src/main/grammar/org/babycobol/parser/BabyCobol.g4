@@ -15,7 +15,11 @@ data_division
     ;
 
 variable
-    :   INT IDENTIFIER (picture | like)? (occurs)? DOT
+    :   level IDENTIFIER (picture | like)? (occurs)? DOT
+    ;
+
+level
+    :   INT
     ;
 
 picture
