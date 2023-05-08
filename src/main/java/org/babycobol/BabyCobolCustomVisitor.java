@@ -218,6 +218,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitCall(BabyCobolParser.CallContext ctx) { return visitChildren(ctx); }
+
+
+    @Override
     public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
         String key;
         Value valueObj;

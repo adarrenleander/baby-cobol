@@ -56,6 +56,10 @@ procname
     :   IDENTIFIER
     ;
 
+filename
+    :   IDENTIFIER
+    ;
+
 statement
     :   accept
     |   add
@@ -73,6 +77,7 @@ statement
     |   goto
     |   alter
     |   copy
+    |   call
     ;
 
 accept
@@ -139,6 +144,12 @@ alter
 copy
     :   'COPY' LITERAL replacing?
     ;
+
+
+call
+    :   CALL filename using? DOT
+    ;
+
 
 replacing
     :   'REPLACING' replacements+
