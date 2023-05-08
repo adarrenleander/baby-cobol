@@ -50,9 +50,8 @@ public class BabyCobolCustomListener extends BabyCobolBaseListener {
                     s = s.replaceAll(toBeReplaced, toReplaceWith);
                 }
             }
+            // the code in the external file is printed to the console instead of adding to the main file
             System.out.println(s);
         }
-
-        // TODO: add the BabyCobol code to main file
     }
 }

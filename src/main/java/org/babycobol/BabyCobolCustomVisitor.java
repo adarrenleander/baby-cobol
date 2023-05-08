@@ -1,7 +1,6 @@
 package org.babycobol;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
 import org.babycobol.exception.ExitLoopException;
 import org.babycobol.exception.GoToException;
@@ -669,12 +668,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         ParseTree proc1 = procNames.get(name1);
         if (proc1.getChild(4) == null) {    // check that ParseTree only contains: [0]procName [1]. [2]statement [3].
             if (proc1.getChild(2).getText().startsWith("GO TO")) {
-                // make new node for GOTO
-                // replace old node
-                // OR
-                // make new parse tree for proc1
-
-                // TODO: fix implementation, currently behaving like a PERFORM
+                // this implementation behaves like a PERFORM
                 ParseTree tree = procNames.get(name2);
                 procNames.put(name1, tree);
             }
