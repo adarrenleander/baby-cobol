@@ -21,14 +21,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         this.procNames = procNames;
     }
 
-    // TODO: delete this
-    public void printVariableMap() {
-        for (String key : variableMap.keySet()) {
-            System.out.print(key + " = " + variableMap.get(key).getValue() + ", ");
-        }
-        System.out.println();
-    }
-
     public Boolean isConformsToPicture(String value, String picture) {
         if (value.length() != picture.length()) {
             return false;
@@ -84,7 +76,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -121,7 +112,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -162,7 +152,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -306,7 +295,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             variableMap.put(key, valueObj);
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -364,7 +352,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -567,7 +554,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -649,7 +635,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             variableMap.put(name, currValue);
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
