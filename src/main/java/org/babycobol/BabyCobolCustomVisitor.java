@@ -1,7 +1,6 @@
 package org.babycobol;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
 import org.babycobol.exception.ExitLoopException;
 import org.babycobol.exception.GoToException;
@@ -217,6 +216,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         throw new RuntimeException("Not a valid GO TO target");
     }
+
+    @Override
+    public Object visitCall(BabyCobolParser.CallContext ctx) { return visitChildren(ctx); }
+
 
     @Override
     public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
