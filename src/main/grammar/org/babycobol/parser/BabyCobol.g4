@@ -6,11 +6,11 @@ program
     ;
 
 identification_division
-    :   'IDENTIFICATION DIVISION.' (IDENTIFIER DOT LITERAL DOT)*
+    :   IDENTIFICATION DIVISION DOT (IDENTIFIER DOT LITERAL DOT)*
     ;
 
 data_division
-    :   'DATA DIVISION.' variable*
+    :   DATA DIVISION DOT variable*
     ;
 
 variable
@@ -18,29 +18,29 @@ variable
     ;
 
 picture
-    :   'PICTURE IS' REPRESENTATION
+    :   PICTURE IS REPRESENTATION
     ;
 
 like
-    :   'LIKE' identifiers
+    :   LIKE identifiers
     ;
 
 occurs
-    :   'OCCURS' INT 'TIMES'
+    :   OCCURS INT TIMES
     ;
 
 procedure_division
-    :   'PROCEDURE DIVISION' using? DOT sentence+
+    :   PROCEDURE DIVISION using? DOT sentence+
     ;
 
 using
-    :   'USING' using_expression+
+    :   USING using_expression+
     ;
 
 using_expression
-    :   'BY REFERENCE' identifiers
-    |   'BY CONTENT' atomic
-    |   'BY VALUE' atomic
+    :   BY REFERENCE identifiers
+    |   BY CONTENT atomic
+    |   BY VALUE atomic
     ;
 
 sentence
@@ -74,31 +74,31 @@ accept
 
 
 add
-    :   ADD additions+=INT+ 'TO' identifiers
-    |   ADD additions+=INT+ 'TO' base=INT giving
+    :   ADD additions+=INT+ TO identifiers
+    |   ADD additions+=INT+ TO base=INT giving
     ;
 
 subtract
-    :   SUBTRACT subtractors+=INT+ 'FROM' identifiers
-    |   SUBTRACT subtractors+=INT+ 'FROM' base=INT giving
+    :   SUBTRACT subtractors+=INT+ FROM identifiers
+    |   SUBTRACT subtractors+=INT+ FROM base=INT giving
     ;
 
 divide
-    :   DIVIDE divisor=INT 'INTO' identifiers+
-    |   DIVIDE divisor=INT 'INTO' base=INT giving
-    |   DIVIDE divisor=INT 'INTO' base=INT giving remainder
+    :   DIVIDE divisor=INT INTO identifiers+
+    |   DIVIDE divisor=INT INTO base=INT giving
+    |   DIVIDE divisor=INT INTO base=INT giving remainder
     ;
 
 multiply
-    :   MULTIPLY multiplier=INT 'BY' identifiers+
-    |   MULTIPLY multiplier=INT 'BY' base=INT giving
+    :   MULTIPLY multiplier=INT BY identifiers+
+    |   MULTIPLY multiplier=INT BY base=INT giving
     ;
 
 perform
     :   PERFORM  procname through?
     ;
 
-through: 'THROUGH' procname;
+through: THROUGH procname;
 
 display
     :   DISPLAY  atomic+ withnoadvancing?
@@ -109,27 +109,27 @@ stop
     ;
 
 if
-    :   IF boolean_expression 'THEN' i+=statement+ ('ELSE' e+=statement+)? 'END'
+    :   IF boolean_expression THEN i+=statement+ (ELSE e+=statement+)? END
     ;
 
 evaluate
-    :   EVALUATE any_expression when_block* 'END'
+    :   EVALUATE any_expression when_block* END
     ;
 
 next_sentence
-    :   'NEXT SENTENCE'
+    :   NEXT SENTENCE
     ;
 
 loop
-    :   LOOP loop_expression* 'END'
+    :   LOOP loop_expression* END
     ;
 
 goto
-    :   'GO TO' IDENTIFIER
+    :   GO TO IDENTIFIER
     ;
 
 move
-    :   MOVE (INT | singlevar) 'TO' multivar
+    :   MOVE (INT | singlevar) TO multivar
     ;
 
 multivar
@@ -141,21 +141,21 @@ singlevar
     ;
 
 remainder
-    :   'REMAINDER' identifiers
+    :   REMAINDER identifiers
     ;
 
 giving
-    :   'GIVING' identifiers
+    :   GIVING identifiers
     ;
 
 withnoadvancing
-    :   'WITH NO ADVANCING'
+    :   WITH NO ADVANCING
     ;
 
 loop_expression
-    :   'VARYING' identifiers? ('FROM' from=atomic)? ('TO' to=atomic)? ('BY' by=atomic)?    #loop_varying_expression
-    |   'WHILE' boolean_expression                                                          #loop_while_expression
-    |   'UNTIL' boolean_expression                                                          #loop_until_expression
+    :   VARYING identifiers? (FROM from=atomic)? (TO to=atomic)? (BY by=atomic)?    #loop_varying_expression
+    |   WHILE boolean_expression                                                          #loop_while_expression
+    |   UNTIL boolean_expression                                                          #loop_until_expression
     |   statement                                                                           #loop_statement_expession
     ;
 
@@ -176,16 +176,16 @@ string_expression
     ;
 
 boolean_expression
-    :   'TRUE'
-    |   'FALSE'
+    :   TRUE
+    |   FALSE
     |   arithmetic_expression COMPARISON_OPERATOR arithmetic_expression
-    |   'NOT' boolean_expression
+    |   NOT boolean_expression
     |   boolean_expression BOOLEAN_OPERATOR boolean_expression
     ;
 
 when_block
-    :   'WHEN' atomic statement+
-    |   'WHEN OTHER' statement+
+    :   WHEN atomic statement+
+    |   WHEN OTHER statement+
     ;
 
 atomic
@@ -195,5 +195,5 @@ atomic
     ;
 
 identifiers
-    :   IDENTIFIER ('OF' IDENTIFIER)* ('(' INT ')')?
+    :   IDENTIFIER (OF IDENTIFIER)* ('(' INT ')')?
     ;
