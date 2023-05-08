@@ -560,10 +560,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             value = ctx.INT().getText();
         }
 
-        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().identifiers(), variableMap.keySet());
 
         if (varNames.isEmpty())
-            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().identifiers());
 
         for (String name : varNames) {
             Value currValue = variableMap.get(name);

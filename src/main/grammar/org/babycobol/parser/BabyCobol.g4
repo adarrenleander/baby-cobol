@@ -153,11 +153,11 @@ move
     ;
 
 multivar
-    :   IDENTIFIER+
+    :   identifiers+
     ;
 
 singlevar
-    :   IDENTIFIER+
+    :   identifiers+
     ;
 
 remainder
