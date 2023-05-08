@@ -26,10 +26,10 @@ ARITHMETIC_OPERATOR
     |   '**'
     ;
 
-ADD : 'A' SPACE * 'D' SPACE* 'D' ;
-MOVE : 'M' SPACE * 'O' SPACE* 'V' SPACE* 'E' ;
-ACCEPT : 'A' SPACE * 'C' SPACE* 'C' SPACE* 'E' SPACE* 'P' SPACE* 'T' ;
-DISPLAY : 'D' SPACE * 'I' SPACE* 'S' SPACE* 'P' SPACE* 'L' SPACE* 'A' SPACE* 'Y' ;
+ADD : 'A' SPACE* 'D' SPACE* 'D' ;
+MOVE : 'M' SPACE* 'O' SPACE* 'V' SPACE* 'E' ;
+ACCEPT : 'A' SPACE* 'C' SPACE* 'C' SPACE* 'E' SPACE* 'P' SPACE* 'T' ;
+DISPLAY : 'D' SPACE* 'I' SPACE* 'S' SPACE* 'P' SPACE* 'L' SPACE* 'A' SPACE* 'Y' ;
 PERFORM : 'P' SPACE* 'E' SPACE* 'R' SPACE* 'F' SPACE* 'O' SPACE* 'R' SPACE* 'M' ;
 STOP : 'S' SPACE* 'T' SPACE* 'O' SPACE* 'P' ;
 SUBTRACT : 'S' SPACE* 'U' SPACE* 'B' SPACE* 'T' SPACE* 'R' SPACE* 'A' SPACE* 'C' SPACE* 'T' ;
@@ -80,9 +80,7 @@ SIGNAL: 'S' SPACE* 'I' SPACE* 'G' SPACE* 'N' SPACE* 'A' SPACE* 'L';
 ON: 'O' SPACE* 'N' ;
 ERROR: 'E' SPACE* 'R' SPACE* 'R' SPACE* 'O' SPACE* 'R' ;
 OFF: 'O' SPACE* 'F' SPACE* 'F' ;
-CALL : 'C' SPACE * 'A' SPACE* 'L' SPACE* 'L';
-
-
+CALL : 'C' SPACE* 'A' SPACE* 'L' SPACE* 'L';
 
 LITERAL
     :   '"' ~'"'+ '"'

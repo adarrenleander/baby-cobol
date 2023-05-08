@@ -2,6 +2,7 @@ package org.babycobol;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.babycobol.exception.ExecutionStoppedException;
+import org.babycobol.exception.ExitLoopException;
 import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
@@ -494,8 +495,31 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
+    public String buildValueBasedOnPicture(String picture) {
+        StringBuilder value = new StringBuilder();
+
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9' -> {
+                    value.append('0');
+                }
+                case 'A', 'X', 'Z', 'S' -> {
+                    value.append(' ');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
+
+        return value.toString();
+    }
+
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
+        if (ctx.variable().size() == 0) {
+            return defaultResult();
+        }
 
         String currParent = "";
         int baseLevel = Integer.parseInt(ctx.variable(0).level().getText());
@@ -635,14 +659,14 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         while (true) {
             try {
                 visitChildren(ctx);
-            } catch (NextSentenceException e) {
+            } catch (NextSentenceException | ExitLoopException e) {
                 return defaultResult();
             }
         }
     }
 
     @Override
-    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
+    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws ExitLoopException {
         int from = 1, by = 1;
         int to = Integer.MAX_VALUE;
         String loopVar = ctx.identifiers().getText();
@@ -656,6 +680,9 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         if (ctx.by != null) {
             by = Integer.parseInt(ctx.by.INT().getText());
         }
+
+        from--;
+        to--;
 
         if (!passFirstVaryingLoop) {
             Value loopVarObj = variableMap.get(loopVar);
@@ -674,7 +701,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         int loopIdx = Integer.parseInt(loopVarObj.getValue());
         if (loopIdx > to) {
-            throw new NextSentenceException("Exit Varying Loop");
+            throw new ExitLoopException("Exit Varying Loop");
         }
         loopVarObj.setValue(String.valueOf(loopIdx + by));
         variableMap.put(loopVar, loopVarObj);
@@ -683,20 +710,44 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws NextSentenceException {
+    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws ExitLoopException {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (!condition) {
-            throw new NextSentenceException("Exit While Loop");
+            throw new ExitLoopException("Exit While Loop");
         }
         return defaultResult();
     }
 
     @Override
-    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) {
+    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) throws ExitLoopException {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (condition) {
-            throw new NextSentenceException("Exit Until Loop");
+            throw new ExitLoopException("Exit Until Loop");
         }
+        return defaultResult();
+    }
+
+    @Override
+    public Object visitAlter(BabyCobolParser.AlterContext ctx) {
+        String name1 = ctx.procname(0).getText();
+        if (!procNames.containsKey(name1)) {
+            throw new IllegalStateException("There is no sentence with name " + name1);
+        }
+
+        String name2 = ctx.procname(1).getText();
+        if (!procNames.containsKey(name2)) {
+            throw new IllegalStateException("There is no sentence with name " + name2);
+        }
+
+        ParseTree proc1 = procNames.get(name1);
+        if (proc1.getChild(4) == null) {    // check that ParseTree only contains: [0]procName [1]. [2]statement [3].
+            if (proc1.getChild(2).getText().startsWith("GO TO")) {
+                // this implementation behaves like a PERFORM
+                ParseTree tree = procNames.get(name2);
+                procNames.put(name1, tree);
+            }
+        }
+
         return defaultResult();
     }
 }

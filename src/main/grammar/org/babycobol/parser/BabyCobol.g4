@@ -1,5 +1,6 @@
 grammar BabyCobol;
 import BCTokens;
+options { caseInsensitive = true; }
 
 program
     :   identification_division (data_division)? procedure_division EOF
@@ -84,7 +85,6 @@ accept
     :   ACCEPT identifiers+
     ;
 
-
 add
     :   ADD additions+=INT+ TO identifiers
     |   ADD additions+=INT+ TO base=INT giving
@@ -110,13 +110,20 @@ perform
     :   PERFORM  procname through?
     ;
 
-through: THROUGH procname;
+through
+    :   THROUGH procname
+    ;
 
-signal: SIGNAL (off|procname) ON ERROR ;
-off: OFF;
+signal
+    :   SIGNAL (off|procname) ON ERROR
+    ;
+
+off
+    :   OFF
+    ;
 
 display
-    :   DISPLAY  atomic+ withnoadvancing?
+    :   DISPLAY atomic+ withnoadvancing?
     ;
 
 stop
