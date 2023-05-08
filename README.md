@@ -14,7 +14,7 @@ Note: don't forget to create a new branch from the latest master branch each tim
 1. Add lexer grammar in BCTokens.g4 file
 2. Add parser grammar in BabyCool.g4 file
 3. Generate ANTLR Recognizer for BabyCobol.g4 file
-4. Add logic in BabyCobolCustomListener.java or BabyCobolCustomVisitor.java files
+4. Add logic in org.babycobol.exception.BabyCobolCustomListener.java or BabyCobolCustomVisitor.java files
 
 ## Testing
 1. Add new syntax to main.bcbl

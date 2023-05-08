@@ -1,6 +1,5 @@
 grammar BabyCobol;
 import BCTokens;
-options { caseInsensitive = true; }
 
 program
     :   identification_division (data_division)? procedure_division EOF
@@ -67,13 +66,12 @@ statement
     |   move
     |   loop
     |   goto
-    |   alter
-    |   copy
     ;
 
 accept
-    :   ACCEPT IDENTIFIER+
+    :    ACCEPT IDENTIFIER+
     ;
+
 
 add
     :   ADD additions+=INT+ 'TO' identifiers
@@ -81,39 +79,41 @@ add
     ;
 
 subtract
-    :   'SUBTRACT' subtractors+=INT+ 'FROM' identifiers
-    |   'SUBTRACT' subtractors+=INT+ 'FROM' base=INT giving
+    :   SUBTRACT subtractors+=INT+ 'FROM' identifiers
+    |   SUBTRACT subtractors+=INT+ 'FROM' base=INT giving
     ;
 
 divide
-    :   'DIVIDE' divisor=INT 'INTO' identifiers+
-    |   'DIVIDE' divisor=INT 'INTO' base=INT giving
-    |   'DIVIDE' divisor=INT 'INTO' base=INT giving remainder
+    :   DIVIDE divisor=INT 'INTO' identifiers+
+    |   DIVIDE divisor=INT 'INTO' base=INT giving
+    |   DIVIDE divisor=INT 'INTO' base=INT giving remainder
     ;
 
 multiply
-    :   'MULTIPLY' multiplier=INT 'BY' identifiers+
-    |   'MULTIPLY' multiplier=INT 'BY' base=INT giving
+    :   MULTIPLY multiplier=INT 'BY' identifiers+
+    |   MULTIPLY multiplier=INT 'BY' base=INT giving
     ;
 
 perform
-    :   'PERFORM' procname
+    :   PERFORM  procname through?
     ;
 
+through: 'THROUGH' procname;
+
 display
-    :   'DISPLAY' atomic+ withnoadvancing?
+    :   DISPLAY  atomic+ withnoadvancing?
     ;
 
 stop
-    :   'STOP'
+    :   STOP
     ;
 
 if
-    :   'IF' boolean_expression 'THEN' i+=statement+ ('ELSE' e+=statement+)? 'END'
+    :   IF boolean_expression 'THEN' i+=statement+ ('ELSE' e+=statement+)? 'END'
     ;
 
 evaluate
-    :   'EVALUATE' any_expression when_block* 'END'
+    :   EVALUATE any_expression when_block* 'END'
     ;
 
 next_sentence
@@ -121,27 +121,11 @@ next_sentence
     ;
 
 loop
-    :   'LOOP' loop_expression* 'END'
+    :   LOOP loop_expression* 'END'
     ;
 
 goto
     :   'GO TO' IDENTIFIER
-    ;
-
-alter
-    :   'ALTER' procname 'TO PROCEED TO' procname
-    ;
-
-copy
-    :   'COPY' LITERAL replacing?
-    ;
-
-replacing
-    :   'REPLACING' replacements+
-    ;
-
-replacements
-    :   COPY_LITERAL 'BY' COPY_LITERAL
     ;
 
 move

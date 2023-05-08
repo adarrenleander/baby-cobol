@@ -3,16 +3,12 @@ package org.babycobol;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
-import org.babycobol.exception.ExitLoopException;
 import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
 import org.babycobol.parser.BabyCobolBaseVisitor;
 import org.babycobol.parser.BabyCobolParser;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 // add overrides of visitor functions here
 public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
@@ -195,16 +191,50 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new ExecutionStoppedException("Stopped");
     }
 
-    public ParseTree getParseTreeFromProcName(String procName) {
+    private void validatePerformProcname(String procName) {
         if (!procNames.containsKey(procName))
             throw new IllegalStateException("Compilation error: there is no sentence with name " + procName);
+    }
+
+    public ParseTree getParseTreeFromProcName(String procName) {
+        validatePerformProcname(procName);
 
         return procNames.get(procName);
     }
 
     @Override
     public Object visitPerform(BabyCobolParser.PerformContext ctx) {
-        return visit(getParseTreeFromProcName(ctx.procname().getText()));
+        if (ctx.through() == null)
+            return visit(getParseTreeFromProcName(ctx.procname().getText()));
+        else {
+            List<ParseTree> statements = fetchSentencesBetweenProcNames(ctx.procname().getText(), ctx.through().procname().getText());
+            statements.forEach(this::visit);
+            return defaultResult();
+        }
+    }
+
+    private List<ParseTree> fetchSentencesBetweenProcNames(String from, String to) {
+        validatePerformProcname(from);
+        validatePerformProcname(to);
+
+        List<ParseTree> statements = new ArrayList<>();
+        boolean betweenProcnames = false;
+
+        for (Map.Entry<String, ParseTree> entry : procNames.entrySet()) {
+            if (entry.getKey().equals(from))
+                betweenProcnames = true;
+
+            if (betweenProcnames)
+                statements.add(entry.getValue());
+
+            if (entry.getKey().equals(to))
+                betweenProcnames = false;
+        }
+
+        if (betweenProcnames)
+            throw new IllegalStateException("Procname %s does not follow procname %s".formatted(to, from));
+
+        return statements;
     }
 
     @Override
@@ -449,53 +479,19 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-    public String buildValueBasedOnPicture(String picture) {
-        StringBuilder value = new StringBuilder();
-
-        for (int i = 0; i < picture.length(); i++) {
-            switch (picture.charAt(i)) {
-                case '9' -> {
-                    value.append('0');
-                }
-                case 'A', 'X', 'Z', 'S' -> {
-                    value.append(' ');
-                }
-                case 'V' -> {
-                    value.append('.');
-                }
-            }
-        }
-
-        return value.toString();
-    }
-
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
         for (BabyCobolParser.VariableContext v : ctx.variable()) {
-            String picture;
             String variable = v.IDENTIFIER().getText();
+            String picture = v.picture().REPRESENTATION().getText();
 
-            if (v.picture() != null) {
-                picture = v.picture().REPRESENTATION().getText();
-            } else if (v.like() != null) {
-                Value likeValue = variableMap.get(v.like().identifiers().getText());
-                if (likeValue != null) {
-                    picture = likeValue.getPicture();
-                } else {
-                    throw new RuntimeException("Variable for LIKE does not exist");
-                }
-            } else {
-                throw new RuntimeException("Picture not defined");
-            }
-
-            String value = buildValueBasedOnPicture(picture);
             if (v.occurs() != null) {
                 int times = Integer.parseInt(v.occurs().INT().getText());
                 for (int i = 0; i < times; i++) {
-                    variableMap.put(variable+"("+i+")", new Value(value, picture));
+                    variableMap.put(variable+"["+i+"]", new Value(null, picture));
                 }
             } else {
-                variableMap.put(variable, new Value(value, picture));
+                variableMap.put(variable, new Value(null, picture));
             }
         }
 
@@ -572,14 +568,14 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         while (true) {
             try {
                 visitChildren(ctx);
-            } catch (NextSentenceException | ExitLoopException e) {
+            } catch (NextSentenceException e) {
                 return defaultResult();
             }
         }
     }
 
     @Override
-    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws ExitLoopException {
+    public Object visitLoop_varying_expression(BabyCobolParser.Loop_varying_expressionContext ctx) throws NextSentenceException {
         int from = 1, by = 1;
         int to = Integer.MAX_VALUE;
         String loopVar = ctx.identifiers().getText();
@@ -593,9 +589,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         if (ctx.by != null) {
             by = Integer.parseInt(ctx.by.INT().getText());
         }
-
-        from--;
-        to--;
 
         if (!passFirstVaryingLoop) {
             Value loopVarObj = variableMap.get(loopVar);
@@ -614,7 +607,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         int loopIdx = Integer.parseInt(loopVarObj.getValue());
         if (loopIdx > to) {
-            throw new ExitLoopException("Exit Varying Loop");
+            throw new NextSentenceException("Exit Varying Loop");
         }
         loopVarObj.setValue(String.valueOf(loopIdx + by));
         variableMap.put(loopVar, loopVarObj);
@@ -623,49 +616,20 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws ExitLoopException {
+    public Object visitLoop_while_expression(BabyCobolParser.Loop_while_expressionContext ctx) throws NextSentenceException {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (!condition) {
-            throw new ExitLoopException("Exit While Loop");
+            throw new NextSentenceException("Exit While Loop");
         }
         return defaultResult();
     }
 
     @Override
-    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) throws ExitLoopException {
+    public Object visitLoop_until_expression(BabyCobolParser.Loop_until_expressionContext ctx) {
         boolean condition = (boolean)visit(ctx.boolean_expression());
         if (condition) {
-            throw new ExitLoopException("Exit Until Loop");
+            throw new NextSentenceException("Exit Until Loop");
         }
-        return defaultResult();
-    }
-
-    @Override
-    public Object visitAlter(BabyCobolParser.AlterContext ctx) {
-        String name1 = ctx.procname(0).getText();
-        if (!procNames.containsKey(name1)) {
-            throw new IllegalStateException("There is no sentence with name " + name1);
-        }
-
-        String name2 = ctx.procname(1).getText();
-        if (!procNames.containsKey(name2)) {
-            throw new IllegalStateException("There is no sentence with name " + name2);
-        }
-
-        ParseTree proc1 = procNames.get(name1);
-        if (proc1.getChild(4) == null) {    // check that ParseTree only contains: [0]procName [1]. [2]statement [3].
-            if (proc1.getChild(2).getText().startsWith("GO TO")) {
-                // make new node for GOTO
-                // replace old node
-                // OR
-                // make new parse tree for proc1
-
-                // TODO: fix implementation, currently behaving like a PERFORM
-                ParseTree tree = procNames.get(name2);
-                procNames.put(name1, tree);
-            }
-        }
-
         return defaultResult();
     }
 }
