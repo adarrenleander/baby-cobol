@@ -15,6 +15,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     private final Map<String, Value> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
     private final VariableParser varParser = new VariableParser();
+    private final SignalHelper signalHelper = new SignalHelper();
 
     public BabyCobolCustomVisitor(Map<String, ParseTree> procNames) {
         this.procNames = procNames;
@@ -235,6 +236,17 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             throw new IllegalStateException("Procname %s does not follow procname %s".formatted(to, from));
 
         return statements;
+    }
+
+    @Override
+    public Object visitSignal(BabyCobolParser.SignalContext ctx) {
+        if (ctx.off() == null) {
+            signalHelper.set(ctx.procname().getText());
+        } else {
+            signalHelper.unset();
+        }
+
+        return defaultResult();
     }
 
     @Override
@@ -516,19 +528,38 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx) {
-        for (int i = 0; i < ctx.getChildCount(); i++) {
+        int currentChild = 0;
+        while (currentChild < ctx.getChildCount()) {
             try {
-                visit(ctx.getChild(i));
+                visit(ctx.getChild(currentChild));
+                currentChild++;
+                signalHelper.stop();
+            } catch (ExecutionStoppedException | IllegalStateException e) {
+                // don't handle compilation and execution exceptions
+                // todo introduce a base SyntaxError class
+                throw e;
             } catch (GoToException e) {
-                for (int j = 0; j < ctx.getChildCount(); j++) {
-                    if (ctx.getChild(j).getText().startsWith(e.getMessage() + ".")) {
-                        i = j;
-                    }
+                currentChild = locateProcName(ctx, e.getMessage());
+            } catch (Exception e) {
+//                e.printStackTrace();
+
+                if (signalHelper.isSet() && signalHelper.outsideHandler()) {
+                    currentChild = locateProcName(ctx, signalHelper.procName());
+                    signalHelper.start();
+                } else {
+                    throw e;
                 }
-                visit(getParseTreeFromProcName(e.getMessage()));
             }
         }
         return defaultResult();
+    }
+
+    private static int locateProcName(BabyCobolParser.Procedure_divisionContext ctx, String procName) {
+        for (int ip = 0; ip < ctx.getChildCount(); ip++) {
+            if (ctx.getChild(ip).getText().startsWith(procName + "."))
+                return ip;
+        }
+        throw new IllegalStateException("Failed to find procname " + procName);
     }
 
     @Override

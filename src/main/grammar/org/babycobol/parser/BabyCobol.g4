@@ -58,6 +58,7 @@ statement
     |   divide
     |   multiply
     |   perform
+    |   signal
     |   display
     |   stop
     |   if
@@ -99,6 +100,9 @@ perform
     ;
 
 through: THROUGH procname;
+
+signal: 'SIGNAL' (off|procname) 'ON ERROR' ;
+off: 'OFF';
 
 display
     :   DISPLAY  atomic+ withnoadvancing?
