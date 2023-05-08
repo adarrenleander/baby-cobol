@@ -15,17 +15,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     private final Map<String, Value> variableMap = new HashMap<>();
     private final Map<String, ParseTree> procNames;
     private final VariableParser varParser = new VariableParser();
+    private final SignalHelper signalHelper = new SignalHelper();
 
     public BabyCobolCustomVisitor(Map<String, ParseTree> procNames) {
         this.procNames = procNames;
-    }
-
-    // TODO: delete this
-    public void printVariableMap() {
-        for (String key : variableMap.keySet()) {
-            System.out.print(key + " = " + variableMap.get(key).getValue() + ", ");
-        }
-        System.out.println();
     }
 
     public Boolean isConformsToPicture(String value, String picture) {
@@ -83,7 +76,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -120,7 +112,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -161,7 +152,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         valueObj.setValue(Integer.toString(newValue));
         variableMap.put(key, valueObj);
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -191,16 +181,61 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         throw new ExecutionStoppedException("Stopped");
     }
 
-    public ParseTree getParseTreeFromProcName(String procName) {
+    private void validatePerformProcname(String procName) {
         if (!procNames.containsKey(procName))
             throw new IllegalStateException("Compilation error: there is no sentence with name " + procName);
+    }
+
+    public ParseTree getParseTreeFromProcName(String procName) {
+        validatePerformProcname(procName);
 
         return procNames.get(procName);
     }
 
     @Override
     public Object visitPerform(BabyCobolParser.PerformContext ctx) {
-        return visit(getParseTreeFromProcName(ctx.procname().getText()));
+        if (ctx.through() == null)
+            return visit(getParseTreeFromProcName(ctx.procname().getText()));
+        else {
+            List<ParseTree> statements = fetchSentencesBetweenProcNames(ctx.procname().getText(), ctx.through().procname().getText());
+            statements.forEach(this::visit);
+            return defaultResult();
+        }
+    }
+
+    private List<ParseTree> fetchSentencesBetweenProcNames(String from, String to) {
+        validatePerformProcname(from);
+        validatePerformProcname(to);
+
+        List<ParseTree> statements = new ArrayList<>();
+        boolean betweenProcnames = false;
+
+        for (Map.Entry<String, ParseTree> entry : procNames.entrySet()) {
+            if (entry.getKey().equals(from))
+                betweenProcnames = true;
+
+            if (betweenProcnames)
+                statements.add(entry.getValue());
+
+            if (entry.getKey().equals(to))
+                betweenProcnames = false;
+        }
+
+        if (betweenProcnames)
+            throw new IllegalStateException("Procname %s does not follow procname %s".formatted(to, from));
+
+        return statements;
+    }
+
+    @Override
+    public Object visitSignal(BabyCobolParser.SignalContext ctx) {
+        if (ctx.off() == null) {
+            signalHelper.set(ctx.procname().getText());
+        } else {
+            signalHelper.unset();
+        }
+
+        return defaultResult();
     }
 
     @Override
@@ -260,7 +295,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             variableMap.put(key, valueObj);
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -318,7 +352,6 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -449,9 +482,8 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-    public String buildValueBasedOnPicture(String picture) {
+    public String buildSpacesValueBasedOnPicture(String picture) {
         StringBuilder value = new StringBuilder();
-
         for (int i = 0; i < picture.length(); i++) {
             switch (picture.charAt(i)) {
                 case '9' -> {
@@ -465,12 +497,78 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                 }
             }
         }
+        return value.toString();
+    }
 
+    public String buildHighValueBasedOnPicture(String picture) {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9', 'Z' -> {
+                    value.append('9');
+                }
+                case 'A' -> {
+                    value.append('z');
+                }
+                case 'X' -> {
+                    value.append((char)255);
+                }
+                case 'S' -> {
+                    value.append('+');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
+        return value.toString();
+    }
+
+    public String buildLowValueBasedOnPicture(String picture) {
+        boolean isStartsWithS = picture.startsWith("S");
+        boolean isAll9 = true;
+        if (isStartsWithS) {
+            for (int i = 1; i < picture.length(); i++) {
+                if (picture.charAt(i) != '9') {
+                    isAll9 = false;
+                    break;
+                }
+            }
+        }
+
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9' -> {
+                    if (isStartsWithS && isAll9) {
+                        value.append('9');
+                    } else {
+                        value.append('0');
+                    }
+                }
+                case 'A', 'Z' -> {
+                    value.append(' ');
+                }
+                case 'X' -> {
+                    value.append((char)0);
+                }
+                case 'S' -> {
+                    value.append('-');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
         return value.toString();
     }
 
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
+        if (ctx.variable().size() == 0) {
+            return defaultResult();
+        }
+
         String currParent = "";
         int baseLevel = Integer.parseInt(ctx.variable(0).level().getText());
         List<BabyCobolParser.VariableContext> v = ctx.variable();
@@ -496,7 +594,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
 
             if (!Objects.equals(picture, "")) {
-                String value = buildValueBasedOnPicture(picture);
+                String value = buildSpacesValueBasedOnPicture(picture);
                 if (v.get(i).occurs() != null) {
                     int times = Integer.parseInt(v.get(i).occurs().INT().getText());
                     for (int j = 0; j < times; j++) {
@@ -513,10 +611,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                     }
                     variableMap.put(variable.toString(), new Value(value, picture));
                 }
+
             }
         }
 
-        printVariableMap();
         return defaultResult();
     }
 
@@ -537,30 +635,46 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitProcedure_division(BabyCobolParser.Procedure_divisionContext ctx) {
-        for (int i = 0; i < ctx.getChildCount(); i++) {
+        int currentChild = 0;
+        while (currentChild < ctx.getChildCount()) {
             try {
-                visit(ctx.getChild(i));
+                visit(ctx.getChild(currentChild));
+                currentChild++;
+                signalHelper.stop();
+            } catch (ExecutionStoppedException | IllegalStateException e) {
+                // don't handle compilation and execution exceptions
+                // need to introduce a base SyntaxError class
+                throw e;
             } catch (GoToException e) {
-                for (int j = 0; j < ctx.getChildCount(); j++) {
-                    if (ctx.getChild(j).getText().startsWith(e.getMessage() + ".")) {
-                        i = j;
-                    }
+                currentChild = locateProcName(ctx, e.getMessage());
+            } catch (Exception e) {
+                if (signalHelper.isSet() && signalHelper.outsideHandler()) {
+                    currentChild = locateProcName(ctx, signalHelper.procName());
+                    signalHelper.start();
+                } else {
+                    throw e;
                 }
-                visit(getParseTreeFromProcName(e.getMessage()));
             }
         }
         return defaultResult();
     }
 
+    private static int locateProcName(BabyCobolParser.Procedure_divisionContext ctx, String procName) {
+        for (int ip = 0; ip < ctx.getChildCount(); ip++) {
+            if (ctx.getChild(ip).getText().startsWith(procName + "."))
+                return ip;
+        }
+        throw new IllegalStateException("Failed to find procname " + procName);
+    }
+
     @Override
     public Object visitMove(BabyCobolParser.MoveContext ctx) {
-
-        String value;
-        if (ctx.INT() == null) {
+        String value = "";
+        if (ctx.INT() != null) {
+            value = ctx.INT().getText();
+        } else if (ctx.singlevar() != null) {
             String variableName = varParser.parseSingleVar(ctx.singlevar());
             value = variableMap.get(variableName).getValue();
-        } else {
-            value = ctx.INT().getText();
         }
 
         List<String> varNames = varParser.parseMultiVar(ctx.multivar().identifiers(), variableMap.keySet());
@@ -571,15 +685,22 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         for (String name : varNames) {
             Value currValue = variableMap.get(name);
 
-            if (!isConformsToPicture(value, currValue.getPicture())) {
-                throw new RuntimeException("Move value does not match picture");
+            if (ctx.SPACES() != null) {
+                value = buildSpacesValueBasedOnPicture(currValue.getPicture());
+            } else if (ctx.HIGH_VALUES() != null) {
+                value = buildHighValueBasedOnPicture(currValue.getPicture());
+            } else if (ctx.LOW_VALUES() != null) {
+                value = buildLowValueBasedOnPicture(currValue.getPicture());
+            } else {
+                if (!isConformsToPicture(value, currValue.getPicture())) {
+                    throw new RuntimeException("Move value does not match picture");
+                }
             }
 
             currValue.setValue(value);
             variableMap.put(name, currValue);
         }
 
-        printVariableMap();
         return defaultResult();
     }
 

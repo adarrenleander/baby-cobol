@@ -7,13 +7,13 @@ import org.babycobol.parser.BabyCobolParser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 // add overrides of listener functions here
 public class BabyCobolCustomListener extends BabyCobolBaseListener {
-    private final Map<String, ParseTree> procNames =  new HashMap<>();
+    private final Map<String, ParseTree> procNames =  new LinkedHashMap<>();
 
     public Map<String, ParseTree> getProcNames() {
         return procNames;
