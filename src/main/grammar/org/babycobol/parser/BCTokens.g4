@@ -81,6 +81,9 @@ ON: 'O' SPACE* 'N' ;
 ERROR: 'E' SPACE* 'R' SPACE* 'R' SPACE* 'O' SPACE* 'R' ;
 OFF: 'O' SPACE* 'F' SPACE* 'F' ;
 CALL : 'C' SPACE* 'A' SPACE* 'L' SPACE* 'L';
+SPACES : 'S' SPACE* 'P' SPACE* 'A' SPACE* 'C' SPACE* 'E' SPACE* 'S';
+HIGH_VALUES : 'H' SPACE* 'I' SPACE* 'G' SPACE* 'H' SPACE* '-' SPACE* 'V' SPACE* 'A' SPACE* 'L' SPACE* 'U' SPACE* 'E' SPACE* 'S';
+LOW_VALUES : 'L' SPACE* 'O' SPACE* 'W' SPACE* '-' SPACE* 'V' SPACE* 'A' SPACE* 'L' SPACE* 'U' SPACE* 'E' SPACE* 'S';
 
 LITERAL
     :   '"' ~'"'+ '"'

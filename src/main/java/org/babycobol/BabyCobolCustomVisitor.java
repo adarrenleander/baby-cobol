@@ -482,9 +482,8 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         return defaultResult();
     }
 
-    public String buildValueBasedOnPicture(String picture) {
+    public String buildSpacesValueBasedOnPicture(String picture) {
         StringBuilder value = new StringBuilder();
-
         for (int i = 0; i < picture.length(); i++) {
             switch (picture.charAt(i)) {
                 case '9' -> {
@@ -498,7 +497,69 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                 }
             }
         }
+        return value.toString();
+    }
 
+    public String buildHighValueBasedOnPicture(String picture) {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9', 'Z' -> {
+                    value.append('9');
+                }
+                case 'A' -> {
+                    value.append('z');
+                }
+                case 'X' -> {
+                    value.append((char)255);
+                }
+                case 'S' -> {
+                    value.append('+');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
+        return value.toString();
+    }
+
+    public String buildLowValueBasedOnPicture(String picture) {
+        boolean isStartsWithS = picture.startsWith("S");
+        boolean isAll9 = true;
+        if (isStartsWithS) {
+            for (int i = 1; i < picture.length(); i++) {
+                if (picture.charAt(i) != '9') {
+                    isAll9 = false;
+                    break;
+                }
+            }
+        }
+
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < picture.length(); i++) {
+            switch (picture.charAt(i)) {
+                case '9' -> {
+                    if (isStartsWithS && isAll9) {
+                        value.append('9');
+                    } else {
+                        value.append('0');
+                    }
+                }
+                case 'A', 'Z' -> {
+                    value.append(' ');
+                }
+                case 'X' -> {
+                    value.append((char)0);
+                }
+                case 'S' -> {
+                    value.append('-');
+                }
+                case 'V' -> {
+                    value.append('.');
+                }
+            }
+        }
         return value.toString();
     }
 
@@ -533,7 +594,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             }
 
             if (!Objects.equals(picture, "")) {
-                String value = buildValueBasedOnPicture(picture);
+                String value = buildSpacesValueBasedOnPicture(picture);
                 if (v.get(i).occurs() != null) {
                     int times = Integer.parseInt(v.get(i).occurs().INT().getText());
                     for (int j = 0; j < times; j++) {
@@ -582,13 +643,11 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
                 signalHelper.stop();
             } catch (ExecutionStoppedException | IllegalStateException e) {
                 // don't handle compilation and execution exceptions
-                // todo introduce a base SyntaxError class
+                // need to introduce a base SyntaxError class
                 throw e;
             } catch (GoToException e) {
                 currentChild = locateProcName(ctx, e.getMessage());
             } catch (Exception e) {
-//                e.printStackTrace();
-
                 if (signalHelper.isSet() && signalHelper.outsideHandler()) {
                     currentChild = locateProcName(ctx, signalHelper.procName());
                     signalHelper.start();
@@ -610,13 +669,12 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitMove(BabyCobolParser.MoveContext ctx) {
-
-        String value;
-        if (ctx.INT() == null) {
+        String value = "";
+        if (ctx.INT() != null) {
+            value = ctx.INT().getText();
+        } else if (ctx.singlevar() != null) {
             String variableName = varParser.parseSingleVar(ctx.singlevar());
             value = variableMap.get(variableName).getValue();
-        } else {
-            value = ctx.INT().getText();
         }
 
         List<String> varNames = varParser.parseMultiVar(ctx.multivar().identifiers(), variableMap.keySet());
@@ -627,8 +685,16 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         for (String name : varNames) {
             Value currValue = variableMap.get(name);
 
-            if (!isConformsToPicture(value, currValue.getPicture())) {
-                throw new RuntimeException("Move value does not match picture");
+            if (ctx.SPACES() != null) {
+                value = buildSpacesValueBasedOnPicture(currValue.getPicture());
+            } else if (ctx.HIGH_VALUES() != null) {
+                value = buildHighValueBasedOnPicture(currValue.getPicture());
+            } else if (ctx.LOW_VALUES() != null) {
+                value = buildLowValueBasedOnPicture(currValue.getPicture());
+            } else {
+                if (!isConformsToPicture(value, currValue.getPicture())) {
+                    throw new RuntimeException("Move value does not match picture");
+                }
             }
 
             currValue.setValue(value);

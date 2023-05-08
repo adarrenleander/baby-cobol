@@ -8,12 +8,13 @@ Written using ANTLR and Java
 3. If you get an error regarding "invalid target release", refer to this page https://stackoverflow.com/questions/73132312/spring-boot-fatal-error-compiling-invalid-target-release-17
 4. Configure ANTLR for BabyCobol.g4 file
 ![Configure ANTLR.png](assets/Configure%20ANTLR.png)
+5. Do "Maven" > "Generate Sources and Update Folders" on pom.xml file
 
 ## Development
 Note: don't forget to create a new branch from the latest master branch each time you implement a new feature
 1. Add lexer grammar in BCTokens.g4 file
 2. Add parser grammar in BabyCool.g4 file
-3. Generate ANTLR Recognizer for BabyCobol.g4 file
+3. Generate ANTLR Recognizer for BabyCobol.g4 file by running "mvn clean package"
 4. Add logic in BabyCobolCustomListener.java or BabyCobolCustomVisitor.java files
 
 ## Testing

@@ -173,7 +173,7 @@ replacements
     ;
 
 move
-    :   MOVE (INT | singlevar) TO multivar
+    :   MOVE (INT | singlevar | SPACES | HIGH_VALUES | LOW_VALUES) TO multivar
     ;
 
 multivar
