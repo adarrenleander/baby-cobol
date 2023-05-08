@@ -101,8 +101,8 @@ perform
 
 through: THROUGH procname;
 
-signal: 'SIGNAL' (off|procname) 'ON ERROR' ;
-off: 'OFF';
+signal: SIGNAL (off|procname) ON ERROR ;
+off: OFF;
 
 display
     :   DISPLAY  atomic+ withnoadvancing?

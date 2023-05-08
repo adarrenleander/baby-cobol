@@ -76,6 +76,12 @@ UNTIL: 'U' SPACE* 'N' SPACE* 'T' SPACE* 'I' SPACE* 'L' ;
 WHILE: 'W' SPACE* 'H' SPACE* 'I' SPACE* 'L' SPACE* 'E' ;
 IDENTIFICATION: 'I' SPACE* 'D' SPACE* 'E' SPACE* 'N' SPACE* 'T' SPACE* 'I' SPACE* 'F' SPACE* 'I' SPACE* 'C' SPACE* 'A' SPACE* 'T' SPACE* 'I' SPACE* 'O' SPACE* 'N' ;
 DATA: 'D' SPACE* 'A' SPACE* 'T' SPACE* 'A' ;
+SIGNAL: 'S' SPACE* 'I' SPACE* 'G' SPACE* 'N' SPACE* 'A' SPACE* 'L';
+ON: 'O' SPACE* 'N' ;
+ERROR: 'E' SPACE* 'R' SPACE* 'R' SPACE* 'O' SPACE* 'R' ;
+OFF: 'O' SPACE* 'F' SPACE* 'F' ;
+
+
 LITERAL
     :   '"' ~'"'+ '"'
     ;
