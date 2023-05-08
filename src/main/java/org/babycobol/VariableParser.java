@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 public class VariableParser {
 
     public String parseSingleVar(BabyCobolParser.SinglevarContext singlevar) {
-        return singlevar.IDENTIFIER().stream()
+        return singlevar.identifiers().stream()
                 .map(ParseTree::getText)
                 .collect(Collectors.joining(""));
     }
 
-    public List<String> parseMultiVar(List<? extends TerminalNode> multivar, Collection<String> declaredNames) {
+    public List<String> parseMultiVar(List<BabyCobolParser.IdentifiersContext> multivar, Collection<String> declaredNames) {
         Map<Integer, List<Integer>> matches = new HashMap<>();
         matches.put(0, new ArrayList<>()); // currentIdx 0 has no matches
 

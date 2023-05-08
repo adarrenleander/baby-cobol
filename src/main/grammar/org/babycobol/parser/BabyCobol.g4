@@ -14,7 +14,11 @@ data_division
     ;
 
 variable
-    :   INT IDENTIFIER (picture | like)? (occurs)? DOT
+    :   level IDENTIFIER (picture | like)? (occurs)? DOT
+    ;
+
+level
+    :   INT
     ;
 
 picture
@@ -51,6 +55,10 @@ procname
     :   IDENTIFIER
     ;
 
+filename
+    :   IDENTIFIER
+    ;
+
 statement
     :   accept
     |   add
@@ -67,10 +75,13 @@ statement
     |   move
     |   loop
     |   goto
+    |   alter
+    |   copy
+    |   call
     ;
 
 accept
-    :    ACCEPT IDENTIFIER+
+    :   ACCEPT identifiers+
     ;
 
 
@@ -132,16 +143,38 @@ goto
     :   GO TO IDENTIFIER
     ;
 
+alter
+    :   'ALTER' procname 'TO PROCEED TO' procname
+    ;
+
+copy
+    :   'COPY' LITERAL replacing?
+    ;
+
+
+call
+    :   CALL filename using? DOT
+    ;
+
+
+replacing
+    :   'REPLACING' replacements+
+    ;
+
+replacements
+    :   COPY_LITERAL 'BY' COPY_LITERAL
+    ;
+
 move
     :   MOVE (INT | singlevar) TO multivar
     ;
 
 multivar
-    :   IDENTIFIER+
+    :   identifiers+
     ;
 
 singlevar
-    :   IDENTIFIER+
+    :   identifiers+
     ;
 
 remainder

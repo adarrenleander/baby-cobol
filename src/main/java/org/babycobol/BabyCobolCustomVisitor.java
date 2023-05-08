@@ -1,7 +1,6 @@
 package org.babycobol;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.babycobol.exception.ExecutionStoppedException;
 import org.babycobol.exception.GoToException;
 import org.babycobol.exception.NextSentenceException;
@@ -70,7 +69,7 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
     @Override
     public Object visitAccept(BabyCobolParser.AcceptContext ctx) {
         Scanner sc = new Scanner(System.in);
-        for (TerminalNode i : ctx.IDENTIFIER()) {
+        for (BabyCobolParser.IdentifiersContext i : ctx.identifiers()) {
             if (variableMap.containsKey(i.getText())) {
                 Value currValue = variableMap.get(i.getText());
                 Value newValue = new Value(sc.next(), currValue.getPicture());
@@ -262,6 +261,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
         }
         throw new RuntimeException("Not a valid GO TO target");
     }
+
+    @Override
+    public Object visitCall(BabyCobolParser.CallContext ctx) { return visitChildren(ctx); }
+
 
     @Override
     public Object visitMultiply(BabyCobolParser.MultiplyContext ctx) {
@@ -493,17 +496,50 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
 
     @Override
     public Object visitData_division(BabyCobolParser.Data_divisionContext ctx) {
-        for (BabyCobolParser.VariableContext v : ctx.variable()) {
-            String variable = v.IDENTIFIER().getText();
-            String picture = v.picture().REPRESENTATION().getText();
 
-            if (v.occurs() != null) {
-                int times = Integer.parseInt(v.occurs().INT().getText());
-                for (int i = 0; i < times; i++) {
-                    variableMap.put(variable+"["+i+"]", new Value(null, picture));
+        String currParent = "";
+        int baseLevel = Integer.parseInt(ctx.variable(0).level().getText());
+        List<BabyCobolParser.VariableContext> v = ctx.variable();
+        for (int i = 0; i < v.size(); i++) {
+            if (Integer.parseInt(v.get(i).level().getText()) == baseLevel) {
+                currParent = v.get(i).IDENTIFIER().getText();
+            }
+
+            String picture = "";
+            StringBuilder variable = new StringBuilder(v.get(i).IDENTIFIER().getText());
+
+            if (v.get(i).picture() != null) {
+                picture = v.get(i).picture().REPRESENTATION().getText();
+            } else if (v.get(i).like() != null) {
+                Value likeValue = variableMap.get(v.get(i).like().identifiers().getText());
+                if (likeValue != null) {
+                    picture = likeValue.getPicture();
+                } else {
+                    throw new RuntimeException("Variable for LIKE does not exist");
                 }
-            } else {
-                variableMap.put(variable, new Value(null, picture));
+            } else if (i+1 >= v.size() || (i+1 < v.size() && Integer.parseInt(v.get(i+1).level().getText()) == baseLevel)) {
+                throw new RuntimeException("Picture not defined");
+            }
+
+            if (!Objects.equals(picture, "")) {
+                String value = buildValueBasedOnPicture(picture);
+                if (v.get(i).occurs() != null) {
+                    int times = Integer.parseInt(v.get(i).occurs().INT().getText());
+                    for (int j = 0; j < times; j++) {
+                        StringBuilder arrayVariable = new StringBuilder(variable.toString());
+                        arrayVariable.append("(").append(j).append(")");
+                        if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
+                            arrayVariable.append("OF").append(currParent);
+                        }
+                        variableMap.put(arrayVariable.toString(), new Value(value, picture));
+                    }
+                } else {
+                    if (Integer.parseInt(v.get(i).level().getText()) > baseLevel) {
+                        variable.append("OF").append(currParent);
+                    }
+                    variableMap.put(variable.toString(), new Value(value, picture));
+                }
+
             }
         }
 
@@ -573,10 +609,10 @@ public class BabyCobolCustomVisitor extends BabyCobolBaseVisitor<Object> {
             value = ctx.INT().getText();
         }
 
-        List<String> varNames = varParser.parseMultiVar(ctx.multivar().IDENTIFIER(), variableMap.keySet());
+        List<String> varNames = varParser.parseMultiVar(ctx.multivar().identifiers(), variableMap.keySet());
 
         if (varNames.isEmpty())
-            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().IDENTIFIER());
+            throw new IllegalStateException("variable names are ambiguous: " + ctx.multivar().identifiers());
 
         for (String name : varNames) {
             Value currValue = variableMap.get(name);

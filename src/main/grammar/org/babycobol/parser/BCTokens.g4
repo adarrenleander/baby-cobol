@@ -80,6 +80,8 @@ SIGNAL: 'S' SPACE* 'I' SPACE* 'G' SPACE* 'N' SPACE* 'A' SPACE* 'L';
 ON: 'O' SPACE* 'N' ;
 ERROR: 'E' SPACE* 'R' SPACE* 'R' SPACE* 'O' SPACE* 'R' ;
 OFF: 'O' SPACE* 'F' SPACE* 'F' ;
+CALL : 'C' SPACE * 'A' SPACE* 'L' SPACE* 'L';
+
 
 
 LITERAL
